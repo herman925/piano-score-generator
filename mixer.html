@@ -236,16 +236,16 @@
     </div>
 
     <!-- Loading Screen Overlay -->
-    <div id="loading-screen" class="fixed inset-0 bg-background bg-opacity-95 flex flex-col items-center justify-center z-50 hidden">
+    <div id="loading-screen" class="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.8); flex-direction: column; align-items: center; justify-content: center; z-index: 50;">
         <div class="text-center">
             <div class="mb-8">
-                <div class="animate-spin rounded-full h-32 w-32 border-8 border-primary border-t-accent mx-auto"></div>
+                <div class="animate-spin rounded-full h-32 w-32 border-8 border-white border-t-accent mx-auto" style="border-color: white; border-top-color: var(--accent);"></div>
             </div>
-            <h2 id="loading-title" class="text-3xl font-bold mb-4">🎵 AI 正在創作你的音樂... 🎵</h2>
-            <div class="w-96 h-8 bg-muted rounded-full border-2 border-foreground overflow-hidden mb-4">
+            <h2 id="loading-title" class="text-3xl font-bold mb-4 text-white" style="color: white;">🎵 AI 正在創作你的音樂... 🎵</h2>
+            <div class="w-96 h-8 bg-gray-700 rounded-full border-2 border-white overflow-hidden mb-4" style="background-color: #374151; border-color: white;">
                 <div id="progress-bar" class="h-full bg-accent transition-all duration-300" style="width: 0%"></div>
             </div>
-            <p id="status-text" class="text-xl font-mono text-muted-foreground">初始化中...</p>
+            <p id="status-text" class="text-xl font-mono text-gray-300" style="color: #d1d5db;">初始化中...</p>
         </div>
     </div>
 
