@@ -172,6 +172,72 @@
             }
         };
 
+        const canonicalScoreMap = {
+            'Happy_Fast_M': 'The_Wheels_On_The_Bus.jpeg',
+            'Excited_Fast_M': 'The_Wheels_On_The_Bus.jpeg',
+            'Happy_Med_M': 'Hot_Cross_Buns.jpeg',
+            'Calm_Med_M': 'Twinkle_Twinkle_Little_Star.jpeg',
+            'Calm_Slow_M': 'Twinkle_Twinkle_Little_Star.jpeg',
+            'Sad_Med_M': 'Rain_Rain_Go_Away.jpeg',
+            'Sad_Slow_M': 'Rain_Rain_Go_Away.jpeg',
+            'Calm_Slow_m': 'The_Bear_Went_Over_The_Mountain.jpeg',
+            'Sad_Slow_m': 'The_Bear_Went_Over_The_Mountain.jpeg',
+            'Happy_Fast_m': 'The_Ants_Go_Marching.jpeg',
+            'Happy_Med_m': 'The_Ants_Go_Marching.jpeg',
+            'Excited_Fast_m': 'The_Ants_Go_Marching.jpeg',
+            'Excited_Med_m': 'The_Ants_Go_Marching.jpeg'
+        };
+
+        const canonicalScores = [
+            {
+                file: 'Hot_Cross_Buns.jpeg',
+                songName: 'Hot Cross Buns',
+                codes: ['Happy_Med_M']
+            },
+            {
+                file: 'The_Wheels_On_The_Bus.jpeg',
+                songName: 'The Wheels on the Bus',
+                codes: ['Happy_Fast_M', 'Excited_Fast_M']
+            },
+            {
+                file: 'Twinkle_Twinkle_Little_Star.jpeg',
+                songName: 'Twinkle Twinkle Little Star',
+                codes: ['Calm_Med_M', 'Calm_Slow_M']
+            },
+            {
+                file: 'Rain_Rain_Go_Away.jpeg',
+                songName: 'Rain Rain Go Away',
+                codes: ['Sad_Med_M', 'Sad_Slow_M']
+            },
+            {
+                file: 'The_Bear_Went_Over_The_Mountain.jpeg',
+                songName: 'The Bear Went Over the Mountain',
+                codes: ['Calm_Slow_m', 'Sad_Slow_m']
+            },
+            {
+                file: 'The_Ants_Go_Marching.jpeg',
+                songName: 'The Ants Go Marching',
+                codes: ['Happy_Fast_m', 'Happy_Med_m', 'Excited_Fast_m', 'Excited_Med_m']
+            }
+        ];
+
+        function mergeCanonicalScores(data) {
+            const mergedScores = Array.isArray(data.scores) ? [...data.scores] : [];
+            canonicalScores.forEach(canonical => {
+                const existingIndex = mergedScores.findIndex(entry => entry.songName === canonical.songName);
+                if (existingIndex >= 0) {
+                    mergedScores[existingIndex] = canonical;
+                } else {
+                    mergedScores.push(canonical);
+                }
+            });
+
+            return {
+                scores: mergedScores,
+                codeToFile: { ...(data.codeToFile || {}), ...canonicalScoreMap }
+            };
+        }
+
         // Get current language from localStorage or default to zh-TW
         let currentLang = localStorage.getItem('language') || 'zh-TW';
 
@@ -302,18 +368,32 @@
             
             const params = JSON.parse(savedParams);
             const scoreCode = generateScoreCode(params);
-            console.log('Generated score code:', scoreCode);
+            console.log('[EqualPlay] Generated score code:', scoreCode, 'from params:', params);
             
             try {
                 // Fetch the scores mapping
-                const response = await fetch('assets/scores.json');
-                const data = await response.json();
+                const response = await fetch('assets/scores.json', { cache: 'no-store' });
+                const rawData = await response.json();
+                const data = mergeCanonicalScores(rawData);
+                console.log('[EqualPlay] Loaded codes:', Object.keys(data.codeToFile || {}));
                 
                 // Look up the file for this code
-                const scoreFile = data.codeToFile[scoreCode];
+                let scoreFile = data.codeToFile[scoreCode];
+                console.log('[EqualPlay] Direct lookup result:', scoreFile);
+
+                // Fall back to scanning the scores list so missing codeToFile entries still resolve
+                if (!scoreFile && Array.isArray(data.scores)) {
+                    const match = data.scores.find(entry =>
+                        Array.isArray(entry.codes) && entry.codes.includes(scoreCode)
+                    );
+                    if (match) {
+                        scoreFile = match.file;
+                        console.log('[EqualPlay] Fallback lookup matched file:', scoreFile);
+                    }
+                }
                 
                 if (!scoreFile || scoreFile === null) {
-                    console.error('No score found for code:', scoreCode);
+                    console.error('[EqualPlay] No score found for code:', scoreCode);
                     showError();
                     return;
                 }
@@ -324,20 +404,22 @@
                 const scoreError = document.getElementById('score-error');
                 
                 scoreImage.onload = function() {
+                    console.log('[EqualPlay] Score image loaded:', scoreImage.src);
                     scoreLoading.style.display = 'none';
                     scoreError.style.display = 'none';
                     scoreImage.style.display = 'block';
                 };
                 
                 scoreImage.onerror = function() {
-                    console.error('Failed to load score image:', scoreFile);
+                    console.error('[EqualPlay] Failed to load score image:', scoreImage.src);
                     showError();
                 };
                 
                 scoreImage.src = `assets/${scoreFile}`;
+                console.log('[EqualPlay] Attempting to load image at path:', scoreImage.src);
                 
             } catch (error) {
-                console.error('Error loading score:', error);
+                console.error('[EqualPlay] Error loading score:', error);
                 showError();
             }
         }
