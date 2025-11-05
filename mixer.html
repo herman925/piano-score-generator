@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Mixer - Parameters</title>
+    <title>音樂創作器 - 參數設定</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/piano_theme_child_1.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -141,37 +141,51 @@
             border-radius: 50%;
             border: 2px solid var(--foreground);
         }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body class="antialiased">
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button id="lang-toggle" class="btn bg-primary text-primary-foreground font-bold py-2 px-4 rounded-lg text-sm">
+            English
+        </button>
+    </div>
 
     <!-- Parameter Selection Page (Music Mixer) -->
     <div class="flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 class="text-3xl font-bold mb-4 text-center">🎹 Music Mixer 🎹</h1>
+        <h1 id="page-title" class="text-3xl font-bold mb-4 text-center">🎹 音樂創作器 🎹</h1>
         <div class="flex items-center justify-center mb-6 text-lg">
-            <img src="https://placehold.co/80x80/FBBF24/3B0764?text=Bear" alt="Friendly Bear Mascot" class="rounded-full border-2 border-foreground shadow-sm mr-4">
-            <p class="p-3 bg-white rounded-lg shadow-md border-2 border-foreground">"Turn the dials to create your song!"</p>
+            <img src="https://placehold.co/80x80/FBBF24/3B0764?text=Bear" alt="友善的熊寶寶吉祥物" class="rounded-full border-2 border-foreground shadow-sm mr-4">
+            <p id="mascot-text" class="p-3 bg-white rounded-lg shadow-md border-2 border-foreground">"調整參數來創作你的歌曲！"</p>
         </div>
 
         <!-- Feeling Selection -->
         <div class="w-full max-w-2xl text-center mb-8 p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
-            <h2 class="text-2xl font-bold mb-6">FEELING</h2>
+            <h2 id="feeling-header" class="text-2xl font-bold mb-6">情緒</h2>
             <div class="grid grid-cols-4 gap-4">
                 <button id="feeling-happy" class="feeling-btn btn p-6 rounded-lg bg-chart-1 text-primary-foreground flex flex-col items-center gap-2">
                     <span class="text-5xl">😄</span>
-                    <span class="text-lg font-bold">Happy</span>
+                    <span class="text-lg font-bold" data-i18n="happy">開心</span>
                 </button>
                 <button id="feeling-excited" class="feeling-btn btn p-6 rounded-lg bg-chart-2 text-primary-foreground flex flex-col items-center gap-2">
                     <span class="text-5xl">🤩</span>
-                    <span class="text-lg font-bold">Excited</span>
+                    <span class="text-lg font-bold" data-i18n="excited">興奮</span>
                 </button>
                 <button id="feeling-calm" class="feeling-btn btn p-6 rounded-lg bg-chart-3 text-accent-foreground flex flex-col items-center gap-2">
                     <span class="text-5xl">😌</span>
-                    <span class="text-lg font-bold">Calm</span>
+                    <span class="text-lg font-bold" data-i18n="calm">平靜</span>
                 </button>
                 <button id="feeling-sad" class="feeling-btn btn p-6 rounded-lg bg-chart-5 text-accent-foreground flex flex-col items-center gap-2">
                     <span class="text-5xl">💧</span>
-                    <span class="text-lg font-bold">Sad</span>
+                    <span class="text-lg font-bold" data-i18n="sad">悲傷</span>
                 </button>
             </div>
         </div>
@@ -179,7 +193,7 @@
         <!-- Key Switches & Tempo Slider -->
         <div class="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
             <div class="text-center p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
-                <h2 class="text-2xl font-bold mb-6">KEY</h2>
+                <h2 id="key-header" class="text-2xl font-bold mb-6">調性</h2>
                 <div class="flex justify-center items-center space-x-4">
                     <span class="text-5xl">☀️</span>
                     <label class="switch">
@@ -190,19 +204,19 @@
                 </div>
             </div>
             <div class="text-center p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
-                <h2 class="text-2xl font-bold mb-6">SPEED</h2>
+                <h2 id="speed-header" class="text-2xl font-bold mb-6">速度</h2>
                 <div class="grid grid-cols-3 gap-3">
                     <button id="speed-slow" class="speed-btn btn bg-secondary text-secondary-foreground p-4 rounded-lg flex flex-col items-center gap-2">
                         <span class="text-4xl">🐢</span>
-                        <span class="text-base font-bold">Slow</span>
+                        <span class="text-base font-bold" data-i18n="slow">慢</span>
                     </button>
                     <button id="speed-medium" class="speed-btn btn bg-primary text-primary-foreground p-4 rounded-lg flex flex-col items-center gap-2">
                         <span class="text-4xl">🏃</span>
-                        <span class="text-base font-bold">Medium</span>
+                        <span class="text-base font-bold" data-i18n="medium">中</span>
                     </button>
                     <button id="speed-fast" class="speed-btn btn bg-destructive text-destructive-foreground p-4 rounded-lg flex flex-col items-center gap-2">
                         <span class="text-4xl">🐇</span>
-                        <span class="text-base font-bold">Fast</span>
+                        <span class="text-base font-bold" data-i18n="fast">快</span>
                     </button>
                 </div>
             </div>
@@ -210,14 +224,14 @@
 
         <!-- AI Prompt Preview Section -->
         <div class="w-full max-w-2xl mt-8 p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
-            <h2 class="text-2xl font-bold mb-4 text-center">🤖 AI PROMPT PREVIEW</h2>
+            <h2 id="prompt-header" class="text-2xl font-bold mb-4 text-center">🤖 AI 提示預覽</h2>
             <div class="p-4 bg-muted rounded-lg border-2 border-foreground font-mono text-sm">
-                <p id="prompt-preview" class="whitespace-pre-wrap">Select your parameters above to generate an AI prompt...</p>
+                <p id="prompt-preview" class="whitespace-pre-wrap">請在上方選擇參數以生成 AI 提示...</p>
             </div>
         </div>
 
         <button id="make-music-btn" class="btn bg-accent text-accent-foreground font-bold py-4 px-8 rounded-full text-2xl mt-12">
-            Make Music! 🎶
+            創作音樂！🎶
         </button>
     </div>
 
@@ -227,15 +241,102 @@
             <div class="mb-8">
                 <div class="animate-spin rounded-full h-32 w-32 border-8 border-primary border-t-accent mx-auto"></div>
             </div>
-            <h2 class="text-3xl font-bold mb-4">🎵 AI is creating your music... 🎵</h2>
+            <h2 id="loading-title" class="text-3xl font-bold mb-4">🎵 AI 正在創作你的音樂... 🎵</h2>
             <div class="w-96 h-8 bg-muted rounded-full border-2 border-foreground overflow-hidden mb-4">
                 <div id="progress-bar" class="h-full bg-accent transition-all duration-300" style="width: 0%"></div>
             </div>
-            <p id="status-text" class="text-xl font-mono text-muted-foreground">Initializing...</p>
+            <p id="status-text" class="text-xl font-mono text-muted-foreground">初始化中...</p>
         </div>
     </div>
 
     <script>
+        // --- Translation System ---
+        const translations = {
+            'zh-TW': {
+                title: '音樂創作器 - 參數設定',
+                pageTitle: '🎹 音樂創作器 🎹',
+                mascotText: '"調整參數來創作你的歌曲！"',
+                mascotAlt: '友善的熊寶寶吉祥物',
+                feelingHeader: '情緒',
+                happy: '開心',
+                excited: '興奮',
+                calm: '平靜',
+                sad: '悲傷',
+                keyHeader: '調性',
+                speedHeader: '速度',
+                slow: '慢',
+                medium: '中',
+                fast: '快',
+                promptHeader: '🤖 AI 提示預覽',
+                promptPlaceholder: '請在上方選擇參數以生成 AI 提示...',
+                makeMusicBtn: '創作音樂！🎶',
+                loadingTitle: '🎵 AI 正在創作你的音樂... 🎵',
+                langButton: 'English',
+                major: '大調',
+                minor: '小調',
+                loadingStatus: ['初始化 AI 作曲器中...', '分析音樂參數中...', '生成旋律結構中...', '創作和聲進行中...', '在五線譜上排列音符中...', '完成你的作品！']
+            },
+            'en': {
+                title: 'Music Mixer - Parameters',
+                pageTitle: '🎹 Music Mixer 🎹',
+                mascotText: '"Turn the dials to create your song!"',
+                mascotAlt: 'Friendly Bear Mascot',
+                feelingHeader: 'FEELING',
+                happy: 'Happy',
+                excited: 'Excited',
+                calm: 'Calm',
+                sad: 'Sad',
+                keyHeader: 'KEY',
+                speedHeader: 'SPEED',
+                slow: 'Slow',
+                medium: 'Medium',
+                fast: 'Fast',
+                promptHeader: '🤖 AI PROMPT PREVIEW',
+                promptPlaceholder: 'Select your parameters above to generate an AI prompt...',
+                makeMusicBtn: 'Make Music! 🎶',
+                loadingTitle: '🎵 AI is creating your music... 🎵',
+                langButton: '繁體中文',
+                major: 'Major',
+                minor: 'Minor',
+                loadingStatus: ['Initializing AI composer...', 'Analyzing musical parameters...', 'Generating melody structure...', 'Creating harmonic progressions...', 'Arranging notes on the staff...', 'Finalizing your composition!']
+            }
+        };
+
+        // Get current language from localStorage or default to zh-TW
+        let currentLang = localStorage.getItem('language') || 'zh-TW';
+
+        // Apply translations
+        function applyTranslations() {
+            const t = translations[currentLang];
+            document.documentElement.lang = currentLang;
+            document.title = t.title;
+            document.getElementById('page-title').textContent = t.pageTitle;
+            document.getElementById('mascot-text').textContent = t.mascotText;
+            document.querySelector('img').alt = t.mascotAlt;
+            document.getElementById('feeling-header').textContent = t.feelingHeader;
+            document.getElementById('key-header').textContent = t.keyHeader;
+            document.getElementById('speed-header').textContent = t.speedHeader;
+            document.getElementById('prompt-header').textContent = t.promptHeader;
+            document.getElementById('make-music-btn').textContent = t.makeMusicBtn;
+            document.getElementById('loading-title').textContent = t.loadingTitle;
+            document.getElementById('lang-toggle').textContent = t.langButton;
+            
+            // Update all data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+            
+            updatePromptPreview();
+        }
+
+        // Toggle language
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+            currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
+            localStorage.setItem('language', currentLang);
+            applyTranslations();
+        });
+
         // --- Music Mixer Logic ---
         const feelingButtons = document.querySelectorAll('.feeling-btn');
         const speedButtons = document.querySelectorAll('.speed-btn');
@@ -258,11 +359,12 @@
         function getSelectedParameters() {
             const selectedFeeling = document.querySelector('.feeling-btn.selected');
             const selectedSpeed = document.querySelector('.speed-btn.selected');
-            const keyMode = keySwitch.checked ? 'Minor' : 'Major';
+            const t = translations[currentLang];
+            const keyMode = keySwitch.checked ? t.minor : t.major;
             
             return {
-                feeling: selectedFeeling ? selectedFeeling.textContent.trim().split('\n').pop().trim() : 'Happy',
-                speed: selectedSpeed ? selectedSpeed.textContent.trim().split('\n').pop().trim() : 'Medium',
+                feeling: selectedFeeling ? selectedFeeling.querySelector('[data-i18n]').textContent.trim() : t.happy,
+                speed: selectedSpeed ? selectedSpeed.querySelector('[data-i18n]').textContent.trim() : t.medium,
                 key: keyMode
             };
         }
@@ -270,21 +372,64 @@
         // Generate AI prompt based on parameters
         function generatePrompt() {
             const params = getSelectedParameters();
+            const t = translations[currentLang];
             
-            const prompt = `Generate a piano composition with the following characteristics:
+            if (currentLang === 'zh-TW') {
+                const feelingLower = params.feeling;
+                const keyDescription = params.key === t.major ? '明亮且振奮的音調' : '憂鬱且內省的音調';
+                let tempoDesc = '';
+                if (params.speed === t.slow) {
+                    tempoDesc = '行板 (60-80 BPM) - 緩慢而從容的節奏';
+                } else if (params.speed === t.medium) {
+                    tempoDesc = '中板 (90-120 BPM) - 舒適的行走節奏';
+                } else {
+                    tempoDesc = '快板 (130-160 BPM) - 快速且充滿活力的節奏';
+                }
+                
+                return `生成具有以下特徵的鋼琴作品：
+
+情緒：${feelingLower}
+- 創作一個${feelingLower}且情感豐富的旋律
+- 使用能喚起${feelingLower}感覺的和弦進行
+
+調性：${params.key}
+- 以${params.key}創作
+- ${keyDescription}
+
+速度：${params.speed}
+- ${tempoDesc}
+
+風格要求：
+- 創作一個適合初級到中級演奏者的簡單、可演奏的鋼琴譜
+- 包含高音譜號和低音譜號記譜
+- 長度：16-32 小節
+- 使用適當的力度和演奏記號
+
+以 MIDI 格式輸出標準樂譜。`;
+            } else {
+                const feelingLower = params.feeling.toLowerCase();
+                const keyDescription = params.key === t.major ? 'Bright and uplifting tonality' : 'Melancholic and introspective tonality';
+                let tempoDesc = '';
+                if (params.speed === t.slow) {
+                    tempoDesc = 'Andante (60-80 BPM) - slow and deliberate pacing';
+                } else if (params.speed === t.medium) {
+                    tempoDesc = 'Moderato (90-120 BPM) - comfortable walking pace';
+                } else {
+                    tempoDesc = 'Allegro (130-160 BPM) - quick and energetic tempo';
+                }
+                
+                return `Generate a piano composition with the following characteristics:
 
 Mood: ${params.feeling}
-- Create a ${params.feeling.toLowerCase()} and emotionally resonant melody
-- Use chord progressions that evoke a ${params.feeling.toLowerCase()} feeling
+- Create a ${feelingLower} and emotionally resonant melody
+- Use chord progressions that evoke a ${feelingLower} feeling
 
 Key: ${params.key}
 - Compose in ${params.key} key
-- ${params.key === 'Major' ? 'Bright and uplifting tonality' : 'Melancholic and introspective tonality'}
+- ${keyDescription}
 
 Tempo: ${params.speed}
-- ${params.speed === 'Slow' ? 'Andante (60-80 BPM) - slow and deliberate pacing' : 
-     params.speed === 'Medium' ? 'Moderato (90-120 BPM) - comfortable walking pace' : 
-     'Allegro (130-160 BPM) - quick and energetic tempo'}
+- ${tempoDesc}
 
 Style Requirements:
 - Create a simple, playable piano score suitable for beginners to intermediate players
@@ -293,13 +438,18 @@ Style Requirements:
 - Use appropriate dynamics and articulation markings
 
 Output the composition as standard music notation in MIDI format.`;
-
-            return prompt;
+            }
         }
 
         // Update prompt preview
         function updatePromptPreview() {
-            promptPreview.textContent = generatePrompt();
+            const t = translations[currentLang];
+            const selectedFeeling = document.querySelector('.feeling-btn.selected');
+            if (!selectedFeeling) {
+                promptPreview.textContent = t.promptPlaceholder;
+            } else {
+                promptPreview.textContent = generatePrompt();
+            }
         }
 
         // Feeling button logic
@@ -335,16 +485,6 @@ Output the composition as standard music notation in MIDI format.`;
             updatePromptPreview();
         });
 
-        // Loading screen statuses
-        const loadingStatuses = [
-            { progress: 0, text: 'Initializing AI composer...' },
-            { progress: 20, text: 'Analyzing musical parameters...' },
-            { progress: 40, text: 'Generating melody structure...' },
-            { progress: 60, text: 'Creating harmonic progressions...' },
-            { progress: 80, text: 'Arranging notes on the staff...' },
-            { progress: 100, text: 'Finalizing your composition!' }
-        ];
-
         // Make Music button logic
         makeMusicBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -355,6 +495,17 @@ Output the composition as standard music notation in MIDI format.`;
             
             // Show loading screen
             loadingScreen.classList.remove('hidden');
+            
+            // Get loading statuses for current language
+            const t = translations[currentLang];
+            const loadingStatuses = [
+                { progress: 0, text: t.loadingStatus[0] },
+                { progress: 20, text: t.loadingStatus[1] },
+                { progress: 40, text: t.loadingStatus[2] },
+                { progress: 60, text: t.loadingStatus[3] },
+                { progress: 80, text: t.loadingStatus[4] },
+                { progress: 100, text: t.loadingStatus[5] }
+            ];
             
             // Animate loading with status updates
             let currentStatus = 0;
@@ -378,7 +529,9 @@ Output the composition as standard music notation in MIDI format.`;
         document.getElementById('feeling-happy').classList.add('selected');
         document.body.style.backgroundColor = feelingColors['feeling-happy'];
         document.getElementById('speed-medium').classList.add('selected');
-        updatePromptPreview();
+        
+        // Apply initial translations
+        applyTranslations();
 
     </script>
 </body>

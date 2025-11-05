@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EqualPlay - Hero</title>
+    <title>EqualPlay - 首頁</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/piano_theme_child_1.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,21 +40,78 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body class="antialiased">
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button id="lang-toggle" class="btn bg-primary text-primary-foreground font-bold py-2 px-4 rounded-lg text-sm">
+            English
+        </button>
+    </div>
 
     <!-- Hero Page -->
     <div class="flex flex-col items-center justify-center min-h-screen text-center p-4">
         <h1 class="text-4xl font-bold mb-4">🎹 EqualPlay 🎹</h1>
         <div class="my-8">
-            <img src="https://placehold.co/300x200/FBBF24/3B0764?text=Cute+Bear+Piano" alt="A cute cartoon bear playing a colorful toy piano" class="rounded-lg shadow-lg">
+            <img src="https://placehold.co/300x200/FBBF24/3B0764?text=Cute+Bear+Piano" alt="一隻可愛的卡通熊正在彈奏彩色玩具鋼琴" class="rounded-lg shadow-lg">
         </div>
-        <h2 class="text-3xl font-bold font-serif mb-4">Let's Make Some Music!</h2>
-        <a href="mixer.html" class="btn bg-accent text-accent-foreground font-bold py-4 px-8 rounded-full text-2xl">
-            Let's Go! 🚀
+        <h2 id="hero-subtitle" class="text-3xl font-bold font-serif mb-4">讓我們一起創作音樂！</h2>
+        <a id="hero-cta" href="mixer.html" class="btn bg-accent text-accent-foreground font-bold py-4 px-8 rounded-full text-2xl">
+            開始創作！🚀
         </a>
     </div>
 
+    <script>
+        // Translation data
+        const translations = {
+            'zh-TW': {
+                title: 'EqualPlay - 首頁',
+                heroSubtitle: '讓我們一起創作音樂！',
+                heroCta: '開始創作！🚀',
+                imgAlt: '一隻可愛的卡通熊正在彈奏彩色玩具鋼琴',
+                langButton: 'English'
+            },
+            'en': {
+                title: 'EqualPlay - Hero',
+                heroSubtitle: "Let's Make Some Music!",
+                heroCta: "Let's Go! 🚀",
+                imgAlt: 'A cute cartoon bear playing a colorful toy piano',
+                langButton: '繁體中文'
+            }
+        };
+
+        // Get current language from localStorage or default to zh-TW
+        let currentLang = localStorage.getItem('language') || 'zh-TW';
+
+        // Apply translations
+        function applyTranslations() {
+            const t = translations[currentLang];
+            document.documentElement.lang = currentLang;
+            document.title = t.title;
+            document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
+            document.getElementById('hero-cta').textContent = t.heroCta;
+            document.querySelector('img').alt = t.imgAlt;
+            document.getElementById('lang-toggle').textContent = t.langButton;
+        }
+
+        // Toggle language
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+            currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
+            localStorage.setItem('language', currentLang);
+            applyTranslations();
+        });
+
+        // Apply initial translations
+        applyTranslations();
+    </script>
 </body>
 </html>
