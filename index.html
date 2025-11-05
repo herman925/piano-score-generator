@@ -7,48 +7,11 @@
     <title>EqualPlay - 首頁</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/piano_theme_child_1.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: var(--background);
-            color: var(--foreground);
-            font-family: var(--font-sans);
-        }
-
-        /* Button Styles & Animations */
-        .btn {
-            border: 2px solid var(--foreground);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.15s ease-out;
-        }
-        .btn:hover {
-            transform: translateY(-3px) rotate(-2deg);
-            box-shadow: var(--shadow-md);
-        }
-        .btn:active {
-            transform: translateY(0) rotate(0) scale(0.98);
-            box-shadow: var(--shadow-2xs);
-        }
-
-        /* Mascot Animation */
-        img {
-            animation: bobbing 3s ease-in-out infinite;
-        }
-        @keyframes bobbing {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        /* Language Switcher */
-        .lang-switcher {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-    </style>
 </head>
 <body class="antialiased">
     <!-- Language Switcher -->
@@ -70,48 +33,7 @@
         </a>
     </div>
 
-    <script>
-        // Translation data
-        const translations = {
-            'zh-TW': {
-                title: 'EqualPlay - 首頁',
-                heroSubtitle: '讓我們一起創作音樂！',
-                heroCta: '開始創作！🚀',
-                imgAlt: '一隻可愛的卡通熊正在彈奏彩色玩具鋼琴',
-                langButton: 'English'
-            },
-            'en': {
-                title: 'EqualPlay - Hero',
-                heroSubtitle: "Let's Make Some Music!",
-                heroCta: "Let's Go! 🚀",
-                imgAlt: 'A cute cartoon bear playing a colorful toy piano',
-                langButton: '繁體中文'
-            }
-        };
-
-        // Get current language from localStorage or default to zh-TW
-        let currentLang = localStorage.getItem('language') || 'zh-TW';
-
-        // Apply translations
-        function applyTranslations() {
-            const t = translations[currentLang];
-            document.documentElement.lang = currentLang;
-            document.title = t.title;
-            document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
-            document.getElementById('hero-cta').textContent = t.heroCta;
-            document.querySelector('img').alt = t.imgAlt;
-            document.getElementById('lang-toggle').textContent = t.langButton;
-        }
-
-        // Toggle language
-        document.getElementById('lang-toggle').addEventListener('click', () => {
-            currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
-            localStorage.setItem('language', currentLang);
-            applyTranslations();
-        });
-
-        // Apply initial translations
-        applyTranslations();
-    </script>
+    <script src="js/translations.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>

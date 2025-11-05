@@ -1,0 +1,36 @@
+/**
+ * Common styles shared across all EqualPlay pages
+ * Neo-brutalism design with bold borders and chunky shadows
+ */
+
+/* Base body styling */
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+}
+
+/* Button Styles & Animations */
+.btn {
+    border: 2px solid var(--foreground);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.15s ease-out;
+}
+
+.btn:hover {
+    transform: translateY(-3px) rotate(-2deg);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: translateY(0) rotate(0) scale(0.98);
+    box-shadow: var(--shadow-2xs);
+}
+
+/* Language Switcher */
+.lang-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}

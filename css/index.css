@@ -1,0 +1,18 @@
+/**
+ * Index/Hero page specific styles
+ * Landing page with mascot and CTA
+ */
+
+/* Mascot Animation */
+img {
+    animation: bobbing 3s ease-in-out infinite;
+}
+
+@keyframes bobbing {
+    0%, 100% { 
+        transform: translateY(0); 
+    }
+    50% { 
+        transform: translateY(-15px); 
+    }
+}

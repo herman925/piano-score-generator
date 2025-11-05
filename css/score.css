@@ -1,0 +1,44 @@
+/**
+ * Score page specific styles
+ * Score display and playback controls
+ */
+
+body {
+    background-color: white;
+}
+
+/* Score Page Styles */
+#landscape-warning {
+    display: none;
+}
+
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    #score-page-content { 
+        display: none !important; 
+    }
+    #landscape-warning { 
+        display: flex !important; 
+    }
+}
+
+.note {
+    font-size: 4rem;
+    font-family: 'serif';
+}
+
+/* Print styles */
+@media print {
+    header, footer {
+        display: none !important;
+    }
+    #score-container {
+        max-width: 100%;
+        padding: 0;
+    }
+    #score-image {
+        max-width: 100%;
+        width: 100%;
+        border: none;
+        box-shadow: none;
+    }
+}
