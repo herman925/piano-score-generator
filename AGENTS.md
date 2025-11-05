@@ -15,14 +15,27 @@ piano-score-generator/
 ├── index.html          # Hero/landing page
 ├── mixer.html          # Parameter selection page (feeling, key, speed)
 ├── score.html          # Generated score display page
-├── css/                # Theme and styling files
+├── css/                # Styling files (all styles now externalized)
 │   ├── piano_theme_child_1.css      # Main theme with CSS variables
+│   ├── common.css                   # Shared styles (buttons, animations)
+│   ├── index.css                    # Index page specific styles
+│   ├── mixer.css                    # Mixer page specific styles
+│   ├── score.css                    # Score page specific styles
 │   ├── piano_theme_1.css            # Alternative theme
-│   ├── piano_score_theme.css        # Score-specific styling
+│   ├── piano_score_theme.css        # Legacy score styling
 │   └── default_ui_darkmode.css      # Dark mode styling
+├── js/                 # JavaScript files (all scripts now externalized)
+│   ├── translations.js              # Shared translation system
+│   ├── index.js                     # Index page logic
+│   ├── mixer.js                     # Mixer page logic (parameter selection)
+│   └── score.js                     # Score page logic (loading & display)
+├── assets/             # Score images and data files
+│   ├── scores.json                  # Score mapping configuration
+│   └── *.jpeg                       # Piano score images
 ├── .gitignore          # Git ignore patterns
 ├── AGENTS.md           # Guidelines for coding agents (this file)
 ├── CLAUDE.md           # Configuration for design extension
+├── CODING_SCHEME.md    # Score naming convention reference
 └── README.md           # User-facing documentation
 ```
 
@@ -67,28 +80,91 @@ Since this is a static HTML project with no build process:
 - Keep inline styles minimal; prefer CSS classes
 
 ### CSS Styling
-- **Theme System:** The project uses CSS custom properties (variables) defined in `piano_theme_child_1.css`
+- **Modular Structure:** CSS is now organized into separate files for maintainability
+  - `css/piano_theme_child_1.css` - CSS custom properties (variables) and theme definitions
+  - `css/common.css` - Shared styles used across all pages (buttons, animations)
+  - `css/index.css` - Index page specific styles
+  - `css/mixer.css` - Mixer page specific styles (feeling buttons, switches, sliders)
+  - `css/score.css` - Score page specific styles (landscape warning, print styles)
 - **Key CSS Variables:**
   - Colors: `--background`, `--foreground`, `--primary`, `--accent`, etc.
   - Typography: `--font-sans`, `--font-serif`, `--font-mono`
   - Shadows: `--shadow-sm`, `--shadow-md`, `--shadow-lg`, etc.
   - Spacing: `--spacing`, `--radius`
-- **Design Style:** Neo-brutalism with chunky borders, bold shadows, and playful colors
-- Use Tailwind utility classes for layout
-- Add custom styles in `<style>` tags when component-specific
+- **Design Style:** Neo-brutalism with chunky borders (2px), bold shadows, and playful colors
+- **Usage:** Use Tailwind utility classes for layout, custom CSS files for component-specific styles
+- **Adding New Styles:** Place shared styles in `common.css`, page-specific styles in respective CSS files
 
 ### JavaScript
-- Use vanilla JavaScript (no frameworks)
-- Keep scripts inline in `<script>` tags for this simple project
-- Use event delegation where appropriate
-- Add comments for complex logic
-- Follow ES6+ conventions (const/let, arrow functions, etc.)
+- **Modular Structure:** JavaScript is now organized into separate files for clarity and reusability
+  - `js/translations.js` - Shared translation system (all language strings and helper functions)
+  - `js/index.js` - Index page logic (language toggle, page initialization)
+  - `js/mixer.js` - Mixer page logic (parameter selection, prompt generation, loading animation)
+  - `js/score.js` - Score page logic (score loading, display, download/print/share functionality)
+- **Architecture:** Use vanilla JavaScript (no frameworks)
+- **Code Organization:**
+  - Place shared utilities in `translations.js`
+  - Keep page-specific logic in respective JS files
+  - Use event delegation where appropriate
+  - Initialize code when DOM is ready using `DOMContentLoaded` or readyState check
+- **Conventions:** Follow ES6+ (const/let, arrow functions, template literals, async/await)
+- **Comments:** Add JSDoc-style comments for functions and complex logic
 
 ### Fonts
 - Primary: Poppins (sans-serif)
 - Secondary: Lora (serif)
 - Monospace: Space Mono
 - All fonts loaded from Google Fonts CDN
+
+## Modular Architecture
+
+### Translation System
+The application uses a centralized translation system defined in `js/translations.js`:
+
+**Key Functions:**
+- `translations` - Object containing all translation strings for both languages (zh-TW and en)
+- `getCurrentLanguage()` - Get current language from localStorage
+- `setCurrentLanguage(lang)` - Save language preference to localStorage
+- `toggleLanguage()` - Switch between languages
+- `getTranslations(lang)` - Get translation object for specified language
+
+**Usage in Pages:**
+```javascript
+const t = getTranslations(currentLang);
+document.title = t.indexTitle;
+```
+
+### Page Initialization Pattern
+All page scripts follow a consistent initialization pattern:
+
+```javascript
+// Get current language
+let currentLang = getCurrentLanguage();
+
+// Define page-specific functions
+function applyTranslations() { /* ... */ }
+function initPage() { /* ... */ }
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPage);
+} else {
+    initPage();
+}
+```
+
+### CSS Loading Order
+Pages load CSS in this order for proper cascade:
+1. Tailwind CSS (CDN)
+2. `css/piano_theme_child_1.css` - Theme variables
+3. `css/common.css` - Shared styles
+4. Page-specific CSS (`css/index.css`, `css/mixer.css`, or `css/score.css`)
+
+### JavaScript Loading Order
+Pages load JavaScript in this order:
+1. External libraries (Tailwind, Lucide icons)
+2. `js/translations.js` - Must load first as other scripts depend on it
+3. Page-specific script (`js/index.js`, `js/mixer.js`, or `js/score.js`)
 
 ## Testing Guidelines
 
@@ -157,30 +233,61 @@ Since this is a static HTML project without a test framework:
 
 ### Adding a New Page
 1. Create new HTML file in root directory
-2. Include the same `<head>` setup (Tailwind, theme CSS, fonts)
-3. Use consistent button styles (`.btn` class)
-4. Add navigation links from existing pages
-5. Test navigation flow
+2. Include the same `<head>` setup:
+   ```html
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link rel="stylesheet" href="css/piano_theme_child_1.css">
+   <link rel="stylesheet" href="css/common.css">
+   <link rel="stylesheet" href="css/your-page.css">
+   ```
+3. Create corresponding CSS file in `css/` directory for page-specific styles
+4. Create corresponding JS file in `js/` directory for page-specific logic
+5. Include scripts at end of `<body>`:
+   ```html
+   <script src="js/translations.js"></script>
+   <script src="js/your-page.js"></script>
+   ```
+6. Use consistent button styles (`.btn` class from `common.css`)
+7. Add navigation links from existing pages
+8. Test navigation flow
 
 ### Modifying Theme
 1. Edit CSS variables in `css/piano_theme_child_1.css`
-2. Changes will apply across all pages
+2. Changes will apply across all pages automatically
 3. Test color contrast for accessibility
 4. Verify readability on all pages
 
 ### Adding Interactive Features
 1. Add HTML elements with appropriate IDs
-2. Write JavaScript in inline `<script>` tag
-3. Use `addEventListener` for interactions
-4. Test across different browsers
-5. Ensure mobile compatibility
+2. Add JavaScript to the appropriate page file in `js/` directory
+3. For shared functionality, add to `js/translations.js` or create a new shared utility file
+4. Use `addEventListener` for interactions
+5. Follow the initialization pattern (check `DOMContentLoaded`)
+6. Test across different browsers
+7. Ensure mobile compatibility
 
 ### Updating Styling
-1. Prefer Tailwind utility classes for layout
-2. Use CSS custom properties from theme
-3. Add custom styles in page `<style>` tag if component-specific
-4. Maintain the neo-brutalism design aesthetic
-5. Keep borders bold (2px) and shadows chunky
+1. **For shared styles:** Edit `css/common.css`
+2. **For page-specific styles:** Edit the corresponding CSS file (`css/index.css`, `css/mixer.css`, `css/score.css`)
+3. **For theme variables:** Edit `css/piano_theme_child_1.css`
+4. Prefer Tailwind utility classes for layout
+5. Use CSS custom properties from theme for colors, shadows, spacing
+6. Maintain the neo-brutalism design aesthetic
+7. Keep borders bold (2px) and shadows chunky
+
+### Adding Translations
+1. Open `js/translations.js`
+2. Add new translation keys to both language objects (`zh-TW` and `en`)
+3. Use the translation in your page JavaScript:
+   ```javascript
+   const t = getTranslations(currentLang);
+   element.textContent = t.yourNewKey;
+   ```
+4. For dynamic content, use `data-i18n` attributes in HTML:
+   ```html
+   <span data-i18n="yourKey">Default Text</span>
+   ```
+5. Update the translation in your page's `applyTranslations()` function
 
 ## Score Coding Scheme
 

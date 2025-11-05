@@ -98,9 +98,15 @@ For the complete score inventory and technical details, see [CODING_SCHEME.md](.
 ## 🛠️ Technology Stack
 
 - **Frontend:** Pure HTML5, CSS3, JavaScript (ES6+)
+- **Architecture:** Modular design with separated CSS and JavaScript files
 - **Styling:** 
-  - Tailwind CSS (via CDN)
-  - Custom CSS with CSS variables for theming
+  - Tailwind CSS (via CDN) for utility classes
+  - Custom modular CSS with CSS variables for theming
+  - Separated page-specific and shared stylesheets
+- **JavaScript:**
+  - Vanilla ES6+ JavaScript
+  - Modular structure with shared translation system
+  - Page-specific logic in separate files
 - **Icons:** Lucide Icons (via CDN)
 - **Fonts:** Google Fonts (Poppins, Lora, Space Mono)
 
@@ -113,11 +119,41 @@ piano-score-generator/
 ├── index.html          # Landing/hero page
 ├── mixer.html          # Parameter selection interface
 ├── score.html          # Generated score display
-└── css/                # Theme and styling files
-    ├── piano_theme_child_1.css    # Main application theme
-    ├── piano_theme_1.css          # Alternative theme
-    ├── piano_score_theme.css      # Score-specific styles
-    └── default_ui_darkmode.css    # Dark mode theme
+├── css/                # Modular styling files
+│   ├── piano_theme_child_1.css    # Theme variables and colors
+│   ├── common.css                 # Shared styles across all pages
+│   ├── index.css                  # Index page specific styles
+│   ├── mixer.css                  # Mixer page specific styles
+│   ├── score.css                  # Score page specific styles
+│   ├── piano_theme_1.css          # Alternative theme
+│   ├── piano_score_theme.css      # Legacy score styles
+│   └── default_ui_darkmode.css    # Dark mode theme
+├── js/                 # Modular JavaScript files
+│   ├── translations.js            # Shared translation system
+│   ├── index.js                   # Index page logic
+│   ├── mixer.js                   # Mixer page logic
+│   └── score.js                   # Score page logic
+└── assets/             # Score images and data
+    ├── scores.json                # Score mapping configuration
+    └── *.jpeg                     # Piano score images
+```
+
+### Key Features of the Architecture
+
+**🎨 Modular CSS:**
+- `common.css` - Shared button styles, animations, and global utilities
+- Page-specific CSS files for isolated styling concerns
+- Theme variables centralized in `piano_theme_child_1.css`
+
+**⚡ Modular JavaScript:**
+- `translations.js` - Centralized bilingual (繁體中文/English) translation system
+- Page-specific JavaScript files for maintainable code organization
+- Consistent initialization pattern across all pages
+
+**🌐 Translation System:**
+- Unified translation management in `translations.js`
+- Easy language switching with localStorage persistence
+- Shared helper functions: `getCurrentLanguage()`, `toggleLanguage()`, `getTranslations()`
 ```
 
 ## 🤝 Contributing
@@ -146,6 +182,49 @@ Contributions are welcome! Whether you're fixing bugs, adding features, or impro
 - Verify responsive behavior on mobile devices
 - Check that all interactive elements work correctly
 - Ensure no console errors appear in browser DevTools
+
+## 👨‍💻 For Developers
+
+### Code Organization
+
+The codebase follows a modular architecture for better maintainability:
+
+**CSS Files:**
+- Edit `css/common.css` for shared styles (buttons, animations)
+- Edit page-specific CSS files for isolated changes
+- Modify `css/piano_theme_child_1.css` for theme-wide color/spacing changes
+
+**JavaScript Files:**
+- `js/translations.js` contains all translation strings and language utilities
+- Each page has its own JS file with initialization and event handlers
+- Follow the established pattern: check DOM ready state, then call `initPage()`
+
+**Adding New Features:**
+1. Add HTML elements with semantic IDs
+2. Update relevant CSS file (`common.css` for shared, page-specific for isolated)
+3. Add JavaScript to appropriate page file in `js/` directory
+4. For new translatable text, add keys to both languages in `translations.js`
+5. Test across browsers and screen sizes
+
+**Translation System Usage:**
+```javascript
+// Get current language
+const currentLang = getCurrentLanguage();
+
+// Get translations for current language
+const t = getTranslations(currentLang);
+
+// Use translation
+document.getElementById('element').textContent = t.translationKey;
+
+// Toggle language
+document.getElementById('lang-toggle').addEventListener('click', () => {
+    currentLang = toggleLanguage();
+    applyTranslations();
+});
+```
+
+For detailed development guidelines, see [AGENTS.md](./AGENTS.md).
 
 ## 📝 License
 
