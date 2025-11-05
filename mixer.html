@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Mixer - Parameters</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/piano_theme_child_1.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: var(--font-sans);
+            transition: background-color 0.5s ease;
+        }
+
+        /* Button Styles & Animations */
+        .btn {
+            border: 2px solid var(--foreground);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.15s ease-out;
+        }
+        .btn:hover {
+            transform: translateY(-3px) rotate(-2deg);
+            box-shadow: var(--shadow-md);
+        }
+        .btn:active {
+            transform: translateY(0) rotate(0) scale(0.98);
+            box-shadow: var(--shadow-2xs);
+        }
+        
+        /* Feeling Buttons */
+        .feeling-btn {
+            position: relative;
+        }
+        .feeling-btn.selected {
+            border-width: 4px !important;
+            transform: scale(1.1) !important;
+            box-shadow: var(--shadow-lg) !important;
+        }
+        .feeling-btn.selected::after {
+            content: '✓';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--foreground);
+            color: var(--background);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        /* Speed Buttons */
+        .speed-btn.selected {
+            background-color: var(--accent) !important;
+            color: var(--accent-foreground) !important;
+            transform: scale(1.05) !important;
+            box-shadow: var(--shadow-lg) !important;
+        }
+
+        /* Chunky Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 100px;
+            height: 50px;
+        }
+        .switch input { display: none; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--secondary);
+            border: 2px solid var(--foreground);
+            box-shadow: var(--shadow-2xs);
+            transition: .4s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 40px;
+            width: 40px;
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            border: 2px solid var(--foreground);
+            transition: .4s;
+        }
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        input:checked + .slider:before {
+            transform: translateX(50px);
+        }
+        .slider.round {
+            border-radius: 25px;
+        }
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        /* Chunky Slider */
+        .tempo-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 25px;
+            background: var(--muted);
+            outline: none;
+            border: 2px solid var(--foreground);
+            border-radius: 12px;
+            box-shadow: var(--shadow-2xs);
+        }
+        .tempo-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid var(--foreground);
+        }
+        .tempo-slider::-moz-range-thumb {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid var(--foreground);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Parameter Selection Page (Music Mixer) -->
+    <div class="flex flex-col items-center justify-center min-h-screen p-4">
+        <h1 class="text-3xl font-bold mb-4 text-center">🎹 Music Mixer 🎹</h1>
+        <div class="flex items-center justify-center mb-6 text-lg">
+            <img src="https://placehold.co/80x80/FBBF24/3B0764?text=Bear" alt="Friendly Bear Mascot" class="rounded-full border-2 border-foreground shadow-sm mr-4">
+            <p class="p-3 bg-white rounded-lg shadow-md border-2 border-foreground">"Turn the dials to create your song!"</p>
+        </div>
+
+        <!-- Feeling Selection -->
+        <div class="w-full max-w-2xl text-center mb-8 p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
+            <h2 class="text-2xl font-bold mb-6">FEELING</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <button id="feeling-happy" class="feeling-btn btn p-6 rounded-lg bg-chart-1 text-primary-foreground flex flex-col items-center gap-2">
+                    <span class="text-5xl">😄</span>
+                    <span class="text-lg font-bold">Happy</span>
+                </button>
+                <button id="feeling-excited" class="feeling-btn btn p-6 rounded-lg bg-chart-2 text-primary-foreground flex flex-col items-center gap-2">
+                    <span class="text-5xl">🤩</span>
+                    <span class="text-lg font-bold">Excited</span>
+                </button>
+                <button id="feeling-calm" class="feeling-btn btn p-6 rounded-lg bg-chart-3 text-accent-foreground flex flex-col items-center gap-2">
+                    <span class="text-5xl">😌</span>
+                    <span class="text-lg font-bold">Calm</span>
+                </button>
+                <button id="feeling-sad" class="feeling-btn btn p-6 rounded-lg bg-chart-5 text-accent-foreground flex flex-col items-center gap-2">
+                    <span class="text-5xl">💧</span>
+                    <span class="text-lg font-bold">Sad</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Key Switches & Tempo Slider -->
+        <div class="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
+            <div class="text-center p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
+                <h2 class="text-2xl font-bold mb-6">KEY</h2>
+                <div class="flex justify-center items-center space-x-4">
+                    <span class="text-5xl">☀️</span>
+                    <label class="switch">
+                        <input type="checkbox" id="key-switch">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="text-5xl">🌙</span>
+                </div>
+            </div>
+            <div class="text-center p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
+                <h2 class="text-2xl font-bold mb-6">SPEED</h2>
+                <div class="grid grid-cols-3 gap-3">
+                    <button id="speed-slow" class="speed-btn btn bg-secondary text-secondary-foreground p-4 rounded-lg flex flex-col items-center gap-2">
+                        <span class="text-4xl">🐢</span>
+                        <span class="text-base font-bold">Slow</span>
+                    </button>
+                    <button id="speed-medium" class="speed-btn btn bg-primary text-primary-foreground p-4 rounded-lg flex flex-col items-center gap-2">
+                        <span class="text-4xl">🏃</span>
+                        <span class="text-base font-bold">Medium</span>
+                    </button>
+                    <button id="speed-fast" class="speed-btn btn bg-destructive text-destructive-foreground p-4 rounded-lg flex flex-col items-center gap-2">
+                        <span class="text-4xl">🐇</span>
+                        <span class="text-base font-bold">Fast</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <a href="score.html" class="btn bg-accent text-accent-foreground font-bold py-4 px-8 rounded-full text-2xl mt-12">
+            Make Music! 🎶
+        </a>
+    </div>
+
+    <script>
+        // --- Music Mixer Logic ---
+        const feelingButtons = document.querySelectorAll('.feeling-btn');
+        const speedButtons = document.querySelectorAll('.speed-btn');
+        
+        // Background colors for each feeling
+        const feelingColors = {
+            'feeling-happy': 'oklch(0.97 0.05 110)',      // Light yellow-green
+            'feeling-excited': 'oklch(0.96 0.06 320)',    // Light pink
+            'feeling-calm': 'oklch(0.96 0.04 240)',       // Light blue
+            'feeling-sad': 'oklch(0.94 0.02 260)'         // Light purple-gray
+        };
+
+        // Feeling button logic
+        feelingButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Remove selected from all
+                feelingButtons.forEach(btn => btn.classList.remove('selected'));
+                // Add selected to clicked
+                button.classList.add('selected');
+                // Change background color
+                document.body.style.backgroundColor = feelingColors[button.id];
+            });
+        });
+
+        // Speed button logic
+        speedButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Remove selected from all
+                speedButtons.forEach(btn => btn.classList.remove('selected'));
+                // Add selected to clicked
+                button.classList.add('selected');
+            });
+        });
+
+        // Set initial selections
+        document.getElementById('feeling-happy').classList.add('selected');
+        document.body.style.backgroundColor = feelingColors['feeling-happy'];
+        document.getElementById('speed-medium').classList.add('selected');
+
+    </script>
+</body>
+</html>

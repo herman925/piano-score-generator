@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EqualPlay - Hero</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/piano_theme_child_1.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: var(--font-sans);
+        }
+
+        /* Button Styles & Animations */
+        .btn {
+            border: 2px solid var(--foreground);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.15s ease-out;
+        }
+        .btn:hover {
+            transform: translateY(-3px) rotate(-2deg);
+            box-shadow: var(--shadow-md);
+        }
+        .btn:active {
+            transform: translateY(0) rotate(0) scale(0.98);
+            box-shadow: var(--shadow-2xs);
+        }
+
+        /* Mascot Animation */
+        img {
+            animation: bobbing 3s ease-in-out infinite;
+        }
+        @keyframes bobbing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Hero Page -->
+    <div class="flex flex-col items-center justify-center min-h-screen text-center p-4">
+        <h1 class="text-4xl font-bold mb-4">🎹 EqualPlay 🎹</h1>
+        <div class="my-8">
+            <img src="https://placehold.co/300x200/FBBF24/3B0764?text=Cute+Bear+Piano" alt="A cute cartoon bear playing a colorful toy piano" class="rounded-lg shadow-lg">
+        </div>
+        <h2 class="text-3xl font-bold font-serif mb-4">Let's Make Some Music!</h2>
+        <a href="mixer.html" class="btn bg-accent text-accent-foreground font-bold py-4 px-8 rounded-full text-2xl">
+            Let's Go! 🚀
+        </a>
+    </div>
+
+</body>
+</html>
