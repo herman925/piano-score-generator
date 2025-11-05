@@ -182,6 +182,21 @@ Since this is a static HTML project without a test framework:
 4. Maintain the neo-brutalism design aesthetic
 5. Keep borders bold (2px) and shadows chunky
 
+## Score Coding Scheme
+
+The application uses a standardized naming convention for scores:
+
+**Emotion + Speed + Key**
+
+Example: `Happy_Fast_M`, `Sad_Med_m`, `Calm_Slow_M`
+
+Where:
+- **Emotion**: Happy, Excited, Calm, Sad
+- **Speed**: Fast, Med (Medium), Slow
+- **Key**: M (Major) or m (minor)
+
+See `CODING_SCHEME.md` for the complete mapping reference and score inventory.
+
 ## Important Notes
 
 - **No Build Process:** This is intentional - the project is designed to be simple and accessible
@@ -189,6 +204,7 @@ Since this is a static HTML project without a test framework:
 - **No Version Control for Dependencies:** Using `@latest` or unversioned CDN links
 - **Mobile First:** The score page requires landscape orientation on mobile
 - **Design Philosophy:** Playful, child-friendly, with bold colors and chunky UI elements
+- **Score Naming:** All scores follow the Emotion_Speed_Key format defined in CODING_SCHEME.md
 
 ## Troubleshooting
 

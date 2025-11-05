@@ -81,6 +81,20 @@ EqualPlay uses a **neo-brutalism** design style featuring:
 
 The interface is designed to be approachable and fun for children while maintaining visual clarity.
 
+## 🎵 Score Coding Scheme
+
+Piano scores in EqualPlay follow a standardized naming convention:
+
+**Emotion + Speed + Key**
+
+Example: `Happy_Fast_M`, `Sad_Med_m`
+
+- **Emotion:** Happy, Excited, Calm, Sad
+- **Speed:** Fast, Med (Medium), Slow
+- **Key:** M (Major) or m (minor)
+
+For the complete score inventory and technical details, see [CODING_SCHEME.md](./CODING_SCHEME.md).
+
 ## 🛠️ Technology Stack
 
 - **Frontend:** Pure HTML5, CSS3, JavaScript (ES6+)
