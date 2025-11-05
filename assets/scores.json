@@ -24,6 +24,11 @@
       "file": "The_Bear_Went_Over_The_Mountain.jpeg",
       "songName": "The Bear Went Over the Mountain",
       "codes": ["Calm_Slow_m", "Sad_Slow_m"]
+    },
+    {
+      "file": "The_Ants_Go_Marching.jpeg",
+      "songName": "The Ants Go Marching",
+      "codes": ["Happy_Fast_m", "Happy_Med_m", "Excited_Fast_m", "Excited_Med_m"]
     }
   ],
   "codeToFile": {
@@ -36,9 +41,9 @@
     "Sad_Slow_M": "Rain_Rain_Go_Away.jpeg",
     "Calm_Slow_m": "The_Bear_Went_Over_The_Mountain.jpeg",
     "Sad_Slow_m": "The_Bear_Went_Over_The_Mountain.jpeg",
-    "Happy_Fast_m": null,
-    "Happy_Med_m": null,
-    "Excited_Fast_m": null,
-    "Excited_Med_m": null
+    "Happy_Fast_m": "The_Ants_Go_Marching.jpeg",
+    "Happy_Med_m": "The_Ants_Go_Marching.jpeg",
+    "Excited_Fast_m": "The_Ants_Go_Marching.jpeg",
+    "Excited_Med_m": "The_Ants_Go_Marching.jpeg"
   }
 }
