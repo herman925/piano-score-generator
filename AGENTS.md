@@ -21,7 +21,9 @@ piano-score-generator/
 │   ├── piano_score_theme.css        # Score-specific styling
 │   └── default_ui_darkmode.css      # Dark mode styling
 ├── .gitignore          # Git ignore patterns
-└── CLAUDE.md           # AI assistant guidelines
+├── AGENTS.md           # Guidelines for coding agents (this file)
+├── CLAUDE.md           # Guidelines for design agent
+└── README.md           # User-facing documentation
 ```
 
 ## Development Environment
