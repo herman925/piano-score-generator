@@ -366,12 +366,12 @@ Output the composition as standard music notation in MIDI format.`;
                     currentStatus++;
                 } else {
                     clearInterval(statusInterval);
-                    // Navigate to score page after 5 seconds
+                    // Navigate to score page after loading completes
                     setTimeout(() => {
                         window.location.href = 'score.html';
                     }, 300);
                 }
-            }, 800); // Update every 800ms (5 seconds / 6 statuses ≈ 800ms)
+            }, 833); // Update every 833ms (5 seconds / 6 statuses ≈ 833ms)
         });
 
         // Set initial selections and update preview
