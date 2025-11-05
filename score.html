@@ -190,6 +190,51 @@
             updateSongInfo();
         }
 
+        // Helper function to translate parameter value
+        function translateParam(paramValue, paramType) {
+            const t = translations[currentLang];
+            const enTrans = translations['en'];
+            const zhTrans = translations['zh-TW'];
+            
+            // Create lookup table for all possible values
+            const lookupTable = {
+                feeling: {
+                    [enTrans.happy]: [t.happy, enTrans.happy, zhTrans.happy],
+                    [zhTrans.happy]: [t.happy, enTrans.happy, zhTrans.happy],
+                    [enTrans.excited]: [t.excited, enTrans.excited, zhTrans.excited],
+                    [zhTrans.excited]: [t.excited, enTrans.excited, zhTrans.excited],
+                    [enTrans.calm]: [t.calm, enTrans.calm, zhTrans.calm],
+                    [zhTrans.calm]: [t.calm, enTrans.calm, zhTrans.calm],
+                    [enTrans.sad]: [t.sad, enTrans.sad, zhTrans.sad],
+                    [zhTrans.sad]: [t.sad, enTrans.sad, zhTrans.sad]
+                },
+                key: {
+                    [enTrans.major]: [t.major, enTrans.major, zhTrans.major],
+                    [zhTrans.major]: [t.major, enTrans.major, zhTrans.major],
+                    [enTrans.minor]: [t.minor, enTrans.minor, zhTrans.minor],
+                    [zhTrans.minor]: [t.minor, enTrans.minor, zhTrans.minor]
+                },
+                speed: {
+                    [enTrans.slow]: [t.slow, enTrans.slow, zhTrans.slow],
+                    [zhTrans.slow]: [t.slow, enTrans.slow, zhTrans.slow],
+                    [enTrans.medium]: [t.medium, enTrans.medium, zhTrans.medium],
+                    [zhTrans.medium]: [t.medium, enTrans.medium, zhTrans.medium],
+                    [enTrans.fast]: [t.fast, enTrans.fast, zhTrans.fast],
+                    [zhTrans.fast]: [t.fast, enTrans.fast, zhTrans.fast]
+                }
+            };
+            
+            // Find matching value in lookup table
+            const typeTable = lookupTable[paramType];
+            for (const key in typeTable) {
+                if (typeTable[key].includes(paramValue)) {
+                    return typeTable[key][0]; // Return translation for current language
+                }
+            }
+            
+            return paramValue; // Return original if not found
+        }
+
         // Update song info based on saved parameters
         function updateSongInfo() {
             const savedParams = sessionStorage.getItem('musicParams');
@@ -200,39 +245,10 @@
                 const songTitle = document.getElementById('song-title');
                 const songDetails = document.getElementById('song-details');
                 
-                // Map English params to current language
-                let feeling = params.feeling;
-                let key = params.key;
-                let speed = params.speed;
-                
-                // If params are in a different language, translate them
-                if (currentLang === 'zh-TW') {
-                    const enTrans = translations['en'];
-                    if (params.feeling === enTrans.happy || params.feeling === translations['zh-TW'].happy) feeling = t.happy;
-                    else if (params.feeling === enTrans.excited || params.feeling === translations['zh-TW'].excited) feeling = t.excited;
-                    else if (params.feeling === enTrans.calm || params.feeling === translations['zh-TW'].calm) feeling = t.calm;
-                    else if (params.feeling === enTrans.sad || params.feeling === translations['zh-TW'].sad) feeling = t.sad;
-                    
-                    if (params.key === enTrans.major || params.key === translations['zh-TW'].major) key = t.major;
-                    else if (params.key === enTrans.minor || params.key === translations['zh-TW'].minor) key = t.minor;
-                    
-                    if (params.speed === enTrans.slow || params.speed === translations['zh-TW'].slow) speed = t.slow;
-                    else if (params.speed === enTrans.medium || params.speed === translations['zh-TW'].medium) speed = t.medium;
-                    else if (params.speed === enTrans.fast || params.speed === translations['zh-TW'].fast) speed = t.fast;
-                } else {
-                    const zhTrans = translations['zh-TW'];
-                    if (params.feeling === zhTrans.happy || params.feeling === translations['en'].happy) feeling = t.happy;
-                    else if (params.feeling === zhTrans.excited || params.feeling === translations['en'].excited) feeling = t.excited;
-                    else if (params.feeling === zhTrans.calm || params.feeling === translations['en'].calm) feeling = t.calm;
-                    else if (params.feeling === zhTrans.sad || params.feeling === translations['en'].sad) feeling = t.sad;
-                    
-                    if (params.key === zhTrans.major || params.key === translations['en'].major) key = t.major;
-                    else if (params.key === zhTrans.minor || params.key === translations['en'].minor) key = t.minor;
-                    
-                    if (params.speed === zhTrans.slow || params.speed === translations['en'].slow) speed = t.slow;
-                    else if (params.speed === zhTrans.medium || params.speed === translations['en'].medium) speed = t.medium;
-                    else if (params.speed === zhTrans.fast || params.speed === translations['en'].fast) speed = t.fast;
-                }
+                // Translate parameters using helper function
+                const feeling = translateParam(params.feeling, 'feeling');
+                const key = translateParam(params.key, 'key');
+                const speed = translateParam(params.speed, 'speed');
                 
                 // Update title and details
                 songTitle.textContent = `${t.songTitlePrefix}${feeling}${t.songTitleSuffix}`;
