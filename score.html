@@ -372,13 +372,13 @@
             
             try {
                 // Fetch the scores mapping
-                const response = await fetch('assets/scores.json', { cache: 'no-store' });
+                const response = await fetch(`assets/scores.json?ts=${Date.now()}`, { cache: 'no-store' });
                 const rawData = await response.json();
                 const data = mergeCanonicalScores(rawData);
                 console.log('[EqualPlay] Loaded codes:', Object.keys(data.codeToFile || {}));
                 
                 // Look up the file for this code
-                let scoreFile = data.codeToFile[scoreCode];
+                let scoreFile = canonicalScoreMap[scoreCode] || (data.codeToFile ? data.codeToFile[scoreCode] : undefined);
                 console.log('[EqualPlay] Direct lookup result:', scoreFile);
 
                 // Fall back to scanning the scores list so missing codeToFile entries still resolve
@@ -390,6 +390,11 @@
                         scoreFile = match.file;
                         console.log('[EqualPlay] Fallback lookup matched file:', scoreFile);
                     }
+                }
+
+                // Ensure canonical filename is used when available
+                if (canonicalScoreMap[scoreCode]) {
+                    scoreFile = canonicalScoreMap[scoreCode];
                 }
                 
                 if (!scoreFile || scoreFile === null) {
@@ -415,7 +420,7 @@
                     showError();
                 };
                 
-                scoreImage.src = `assets/${scoreFile}`;
+                scoreImage.src = `assets/${scoreFile}?ts=${Date.now()}`;
                 console.log('[EqualPlay] Attempting to load image at path:', scoreImage.src);
                 
             } catch (error) {
