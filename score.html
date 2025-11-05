@@ -312,7 +312,7 @@
                 // Look up the file for this code
                 const scoreFile = data.codeToFile[scoreCode];
                 
-                if (!scoreFile) {
+                if (!scoreFile || scoreFile === null) {
                     console.error('No score found for code:', scoreCode);
                     showError();
                     return;
@@ -372,7 +372,13 @@
             if (scoreImage.src) {
                 const link = document.createElement('a');
                 link.href = scoreImage.src;
-                link.download = scoreImage.src.split('/').pop();
+                // Extract filename more reliably
+                try {
+                    const url = new URL(scoreImage.src, window.location.origin);
+                    link.download = url.pathname.split('/').pop();
+                } catch (e) {
+                    link.download = scoreImage.src.split('/').pop();
+                }
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
