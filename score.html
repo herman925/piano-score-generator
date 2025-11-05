@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Score - EqualPlay</title>
+    <title>我的樂譜 - EqualPlay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/piano_theme_child_1.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,14 +45,28 @@
             font-size: 4rem;
             font-family: 'serif';
         }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body class="antialiased">
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button id="lang-toggle" class="btn bg-primary text-primary-foreground font-bold py-2 px-4 rounded-lg text-sm">
+            English
+        </button>
+    </div>
 
     <!-- Landscape Warning -->
     <div id="landscape-warning" class="flex-col items-center justify-center text-center p-4 min-h-screen">
         <i data-lucide="smartphone" class="w-24 h-24 mb-4 animate-pulse"></i>
-        <h2 class="text-2xl font-bold">Please rotate your device to landscape mode!</h2>
+        <h2 id="landscape-text" class="text-2xl font-bold">請將你的裝置旋轉至橫向模式！</h2>
     </div>
 
     <!-- Score Content -->
@@ -60,13 +74,13 @@
         <header class="flex justify-between items-center mb-4 text-gray-800">
             <a href="mixer.html" class="btn bg-secondary text-secondary-foreground p-3 rounded-lg"><i data-lucide="arrow-left"></i></a>
             <div class="text-center">
-                <h1 id="song-title" class="text-3xl font-bold font-serif">My Happy Song</h1>
-                <p id="song-details" class="text-lg">C Major - Fast</p>
+                <h1 id="song-title" class="text-3xl font-bold font-serif">我的開心歌曲</h1>
+                <p id="song-details" class="text-lg">C 大調 - 快</p>
             </div>
             <div class="flex items-center space-x-2">
-                <button class="btn bg-primary text-primary-foreground p-3 rounded-lg"><i data-lucide="share-2"></i></button>
-                <button class="btn bg-primary text-primary-foreground p-3 rounded-lg"><i data-lucide="download"></i></button>
-                <button class="btn bg-accent text-accent-foreground p-3 rounded-lg"><i data-lucide="printer"></i></button>
+                <button id="share-btn" class="btn bg-primary text-primary-foreground p-3 rounded-lg" title="分享"><i data-lucide="share-2"></i></button>
+                <button id="download-btn" class="btn bg-primary text-primary-foreground p-3 rounded-lg" title="下載"><i data-lucide="download"></i></button>
+                <button id="print-btn" class="btn bg-accent text-accent-foreground p-3 rounded-lg" title="列印"><i data-lucide="printer"></i></button>
             </div>
         </header>
         
@@ -116,6 +130,139 @@
     </div>
 
     <script>
+        // Translation data
+        const translations = {
+            'zh-TW': {
+                title: '我的樂譜 - EqualPlay',
+                landscapeText: '請將你的裝置旋轉至橫向模式！',
+                songTitlePrefix: '我的',
+                songTitleSuffix: '歌曲',
+                happy: '開心',
+                excited: '興奮',
+                calm: '平靜',
+                sad: '悲傷',
+                major: '大調',
+                minor: '小調',
+                slow: '慢',
+                medium: '中',
+                fast: '快',
+                shareTitle: '分享',
+                downloadTitle: '下載',
+                printTitle: '列印',
+                langButton: 'English'
+            },
+            'en': {
+                title: 'My Score - EqualPlay',
+                landscapeText: 'Please rotate your device to landscape mode!',
+                songTitlePrefix: 'My',
+                songTitleSuffix: 'Song',
+                happy: 'Happy',
+                excited: 'Excited',
+                calm: 'Calm',
+                sad: 'Sad',
+                major: 'Major',
+                minor: 'Minor',
+                slow: 'Slow',
+                medium: 'Medium',
+                fast: 'Fast',
+                shareTitle: 'Share',
+                downloadTitle: 'Download',
+                printTitle: 'Print',
+                langButton: '繁體中文'
+            }
+        };
+
+        // Get current language from localStorage or default to zh-TW
+        let currentLang = localStorage.getItem('language') || 'zh-TW';
+
+        // Apply translations
+        function applyTranslations() {
+            const t = translations[currentLang];
+            document.documentElement.lang = currentLang;
+            document.title = t.title;
+            document.getElementById('landscape-text').textContent = t.landscapeText;
+            document.getElementById('lang-toggle').textContent = t.langButton;
+            document.getElementById('share-btn').title = t.shareTitle;
+            document.getElementById('download-btn').title = t.downloadTitle;
+            document.getElementById('print-btn').title = t.printTitle;
+            
+            // Update song title and details from saved params
+            updateSongInfo();
+        }
+
+        // Helper function to translate parameter value
+        function translateParam(paramValue, paramType) {
+            const t = translations[currentLang];
+            const enTrans = translations['en'];
+            const zhTrans = translations['zh-TW'];
+            
+            // Create lookup table for all possible values
+            const lookupTable = {
+                feeling: {
+                    [enTrans.happy]: [t.happy, enTrans.happy, zhTrans.happy],
+                    [zhTrans.happy]: [t.happy, enTrans.happy, zhTrans.happy],
+                    [enTrans.excited]: [t.excited, enTrans.excited, zhTrans.excited],
+                    [zhTrans.excited]: [t.excited, enTrans.excited, zhTrans.excited],
+                    [enTrans.calm]: [t.calm, enTrans.calm, zhTrans.calm],
+                    [zhTrans.calm]: [t.calm, enTrans.calm, zhTrans.calm],
+                    [enTrans.sad]: [t.sad, enTrans.sad, zhTrans.sad],
+                    [zhTrans.sad]: [t.sad, enTrans.sad, zhTrans.sad]
+                },
+                key: {
+                    [enTrans.major]: [t.major, enTrans.major, zhTrans.major],
+                    [zhTrans.major]: [t.major, enTrans.major, zhTrans.major],
+                    [enTrans.minor]: [t.minor, enTrans.minor, zhTrans.minor],
+                    [zhTrans.minor]: [t.minor, enTrans.minor, zhTrans.minor]
+                },
+                speed: {
+                    [enTrans.slow]: [t.slow, enTrans.slow, zhTrans.slow],
+                    [zhTrans.slow]: [t.slow, enTrans.slow, zhTrans.slow],
+                    [enTrans.medium]: [t.medium, enTrans.medium, zhTrans.medium],
+                    [zhTrans.medium]: [t.medium, enTrans.medium, zhTrans.medium],
+                    [enTrans.fast]: [t.fast, enTrans.fast, zhTrans.fast],
+                    [zhTrans.fast]: [t.fast, enTrans.fast, zhTrans.fast]
+                }
+            };
+            
+            // Find matching value in lookup table
+            const typeTable = lookupTable[paramType];
+            for (const key in typeTable) {
+                if (typeTable[key].includes(paramValue)) {
+                    return typeTable[key][0]; // Return translation for current language
+                }
+            }
+            
+            return paramValue; // Return original if not found
+        }
+
+        // Update song info based on saved parameters
+        function updateSongInfo() {
+            const savedParams = sessionStorage.getItem('musicParams');
+            const t = translations[currentLang];
+            
+            if (savedParams) {
+                const params = JSON.parse(savedParams);
+                const songTitle = document.getElementById('song-title');
+                const songDetails = document.getElementById('song-details');
+                
+                // Translate parameters using helper function
+                const feeling = translateParam(params.feeling, 'feeling');
+                const key = translateParam(params.key, 'key');
+                const speed = translateParam(params.speed, 'speed');
+                
+                // Update title and details
+                songTitle.textContent = `${t.songTitlePrefix}${feeling}${t.songTitleSuffix}`;
+                songDetails.textContent = `C ${key} - ${speed}`;
+            }
+        }
+
+        // Toggle language
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+            currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
+            localStorage.setItem('language', currentLang);
+            applyTranslations();
+        });
+
         // Try to create icons, but don't let it break the rest of the script
         try {
             lucide.createIcons();
@@ -123,17 +270,8 @@
             console.log('Lucide icons not loaded');
         }
 
-        // Load parameters from session storage
-        const savedParams = sessionStorage.getItem('musicParams');
-        if (savedParams) {
-            const params = JSON.parse(savedParams);
-            const songTitle = document.getElementById('song-title');
-            const songDetails = document.getElementById('song-details');
-            
-            // Update title and details
-            songTitle.textContent = `My ${params.feeling} Song`;
-            songDetails.textContent = `C ${params.key} - ${params.speed}`;
-        }
+        // Apply initial translations
+        applyTranslations();
     </script>
 </body>
 </html>
