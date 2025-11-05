@@ -1,0 +1,44 @@
+{
+  "scores": [
+    {
+      "file": "Hot_Cross_Buns.jpeg",
+      "songName": "Hot Cross Buns",
+      "codes": ["Happy_Med_M"]
+    },
+    {
+      "file": "The_Wheels_On_The_Bus.jpeg",
+      "songName": "The Wheels on the Bus",
+      "codes": ["Happy_Fast_M", "Excited_Fast_M"]
+    },
+    {
+      "file": "Twinkle_Twinkle_Little_Star.jpeg",
+      "songName": "Twinkle Twinkle Little Star",
+      "codes": ["Calm_Med_M", "Calm_Slow_M"]
+    },
+    {
+      "file": "Rain_Rain_Go_Away.jpeg",
+      "songName": "Rain Rain Go Away",
+      "codes": ["Sad_Med_M", "Sad_Slow_M"]
+    },
+    {
+      "file": "The_Bear_Went_Over_The_Mountain.jpeg",
+      "songName": "The Bear Went Over the Mountain",
+      "codes": ["Calm_Slow_m", "Sad_Slow_m"]
+    }
+  ],
+  "codeToFile": {
+    "Happy_Fast_M": "The_Wheels_On_The_Bus.jpeg",
+    "Excited_Fast_M": "The_Wheels_On_The_Bus.jpeg",
+    "Happy_Med_M": "Hot_Cross_Buns.jpeg",
+    "Calm_Med_M": "Twinkle_Twinkle_Little_Star.jpeg",
+    "Calm_Slow_M": "Twinkle_Twinkle_Little_Star.jpeg",
+    "Sad_Med_M": "Rain_Rain_Go_Away.jpeg",
+    "Sad_Slow_M": "Rain_Rain_Go_Away.jpeg",
+    "Calm_Slow_m": "The_Bear_Went_Over_The_Mountain.jpeg",
+    "Sad_Slow_m": "The_Bear_Went_Over_The_Mountain.jpeg",
+    "Happy_Fast_m": null,
+    "Happy_Med_m": null,
+    "Excited_Fast_m": null,
+    "Excited_Med_m": null
+  }
+}
