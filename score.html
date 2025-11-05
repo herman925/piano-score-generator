@@ -45,6 +45,23 @@
             font-size: 4rem;
             font-family: 'serif';
         }
+        
+        /* Print styles */
+        @media print {
+            header, footer {
+                display: none !important;
+            }
+            #score-container {
+                max-width: 100%;
+                padding: 0;
+            }
+            #score-image {
+                max-width: 100%;
+                width: 100%;
+                border: none;
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -74,39 +91,24 @@
             </div>
         </header>
         
-        <main class="flex-grow w-full overflow-x-auto">
-            <svg width="1200" height="400" class="mx-auto">
-                <!-- Staff Lines -->
-                <g stroke="#4A4A4A" stroke-width="2">
-                    <line x1="10" y1="100" x2="1190" y2="100" />
-                    <line x1="10" y1="120" x2="1190" y2="120" />
-                    <line x1="10" y1="140" x2="1190" y2="140" />
-                    <line x1="10" y1="160" x2="1190" y2="160" />
-                    <line x1="10" y1="180" x2="1190" y2="180" />
-                </g>
-                <!-- Treble Clef -->
-                <text x="20" y="165" class="note">𝄞</text>
-                <!-- Time Signature -->
-                <text x="100" y="140" class="font-bold" font-size="48">4</text>
-                <text x="100" y="180" class="font-bold" font-size="48">4</text>
-                <!-- Notes -->
-                <g fill="#3B82F6">
-                    <circle cx="180" cy="180" r="9" />
-                    <line x1="198" y1="180" x2="198" y2="120" stroke="#3B82F6" stroke-width="3" />
-                </g>
-                <g fill="#10B981">
-                    <circle cx="260" cy="160" r="9" />
-                    <line x1="278" y1="160" x2="278" y2="100" stroke="#10B981" stroke-width="3" />
-                </g>
-                <g fill="#F59E0B">
-                    <circle cx="340" cy="140" r="9" />
-                    <line x1="358" y1="140" x2="358" y2="80" stroke="#F59E0B" stroke-width="3" />
-                </g>
-                <g fill="#EF4444">
-                    <circle cx="420" cy="120" r="9" />
-                    <line x1="438" y1="120" x2="438" y2="60" stroke="#EF4444" stroke-width="3" />
-                </g>
-            </svg>
+        <main class="flex-grow w-full overflow-x-auto flex items-center justify-center">
+            <!-- Score Image Container -->
+            <div id="score-container" class="max-w-full p-4">
+                <img id="score-image" 
+                     src="" 
+                     alt="Musical Score" 
+                     class="w-full h-auto max-w-5xl mx-auto rounded-lg border-4 border-foreground shadow-lg bg-white"
+                     style="display: none;">
+                <div id="score-loading" class="text-center p-8">
+                    <div class="animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-accent mx-auto mb-4"></div>
+                    <p id="loading-text" class="text-xl font-bold">載入樂譜中...</p>
+                </div>
+                <div id="score-error" class="text-center p-8 bg-destructive text-destructive-foreground rounded-lg border-2 border-foreground" style="display: none;">
+                    <p id="error-text" class="text-xl font-bold mb-4">⚠️ 找不到對應的樂譜</p>
+                    <p id="error-details" class="text-base mb-4"></p>
+                    <a href="mixer.html" class="btn bg-primary text-primary-foreground font-bold py-2 px-4 rounded-lg inline-block">返回重新選擇</a>
+                </div>
+            </div>
         </main>
 
         <footer class="flex items-center justify-center mt-4 space-x-6">
@@ -139,7 +141,11 @@
                 shareTitle: '分享',
                 downloadTitle: '下載',
                 printTitle: '列印',
-                langButton: 'English'
+                langButton: 'English',
+                loadingText: '載入樂譜中...',
+                errorTitle: '⚠️ 找不到對應的樂譜',
+                errorDetails: '很抱歉，目前還沒有符合這些參數的樂譜。請返回選擇其他參數。',
+                backButton: '返回重新選擇'
             },
             'en': {
                 title: 'My Score - EqualPlay',
@@ -158,7 +164,11 @@
                 shareTitle: 'Share',
                 downloadTitle: 'Download',
                 printTitle: 'Print',
-                langButton: '繁體中文'
+                langButton: '繁體中文',
+                loadingText: 'Loading score...',
+                errorTitle: '⚠️ Score Not Found',
+                errorDetails: 'Sorry, there is no score available for these parameters yet. Please go back and select different parameters.',
+                backButton: 'Go Back to Mixer'
             }
         };
 
@@ -175,6 +185,15 @@
             document.getElementById('share-btn').title = t.shareTitle;
             document.getElementById('download-btn').title = t.downloadTitle;
             document.getElementById('print-btn').title = t.printTitle;
+            document.getElementById('loading-text').textContent = t.loadingText;
+            document.getElementById('error-text').textContent = t.errorTitle;
+            document.getElementById('error-details').textContent = t.errorDetails;
+            
+            // Update button text in error container
+            const backButton = document.querySelector('#score-error a');
+            if (backButton) {
+                backButton.textContent = t.backButton;
+            }
             
             // Update song title and details from saved params
             updateSongInfo();
@@ -246,6 +265,90 @@
             }
         }
 
+        // Generate score code from parameters
+        function generateScoreCode(params) {
+            const t = translations[currentLang];
+            const enTrans = translations['en'];
+            
+            // Map feeling to English emotion name
+            let emotion = 'Happy'; // default
+            if (params.feeling === t.happy || params.feeling === enTrans.happy) emotion = 'Happy';
+            else if (params.feeling === t.excited || params.feeling === enTrans.excited) emotion = 'Excited';
+            else if (params.feeling === t.calm || params.feeling === enTrans.calm) emotion = 'Calm';
+            else if (params.feeling === t.sad || params.feeling === enTrans.sad) emotion = 'Sad';
+            
+            // Map speed to code format
+            let speed = 'Med'; // default
+            if (params.speed === t.slow || params.speed === enTrans.slow) speed = 'Slow';
+            else if (params.speed === t.medium || params.speed === enTrans.medium) speed = 'Med';
+            else if (params.speed === t.fast || params.speed === enTrans.fast) speed = 'Fast';
+            
+            // Map key to code format
+            let keyCode = 'M'; // default Major
+            if (params.key === t.minor || params.key === enTrans.minor) keyCode = 'm';
+            
+            return `${emotion}_${speed}_${keyCode}`;
+        }
+        
+        // Load and display the score
+        async function loadScore() {
+            const savedParams = sessionStorage.getItem('musicParams');
+            
+            if (!savedParams) {
+                console.error('No parameters found');
+                showError();
+                return;
+            }
+            
+            const params = JSON.parse(savedParams);
+            const scoreCode = generateScoreCode(params);
+            console.log('Generated score code:', scoreCode);
+            
+            try {
+                // Fetch the scores mapping
+                const response = await fetch('assets/scores.json');
+                const data = await response.json();
+                
+                // Look up the file for this code
+                const scoreFile = data.codeToFile[scoreCode];
+                
+                if (!scoreFile) {
+                    console.error('No score found for code:', scoreCode);
+                    showError();
+                    return;
+                }
+                
+                // Load and display the score image
+                const scoreImage = document.getElementById('score-image');
+                const scoreLoading = document.getElementById('score-loading');
+                const scoreError = document.getElementById('score-error');
+                
+                scoreImage.onload = function() {
+                    scoreLoading.style.display = 'none';
+                    scoreError.style.display = 'none';
+                    scoreImage.style.display = 'block';
+                };
+                
+                scoreImage.onerror = function() {
+                    console.error('Failed to load score image:', scoreFile);
+                    showError();
+                };
+                
+                scoreImage.src = `assets/${scoreFile}`;
+                
+            } catch (error) {
+                console.error('Error loading score:', error);
+                showError();
+            }
+        }
+        
+        // Show error message
+        function showError() {
+            document.getElementById('score-loading').style.display = 'none';
+            document.getElementById('score-image').style.display = 'none';
+            document.getElementById('score-error').style.display = 'block';
+        }
+
         // Toggle language
         document.getElementById('lang-toggle').addEventListener('click', () => {
             currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
@@ -262,6 +365,42 @@
 
         // Apply initial translations
         applyTranslations();
+        
+        // Download button functionality
+        document.getElementById('download-btn').addEventListener('click', () => {
+            const scoreImage = document.getElementById('score-image');
+            if (scoreImage.src) {
+                const link = document.createElement('a');
+                link.href = scoreImage.src;
+                link.download = scoreImage.src.split('/').pop();
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+        
+        // Print button functionality
+        document.getElementById('print-btn').addEventListener('click', () => {
+            window.print();
+        });
+        
+        // Share button functionality (simple copy to clipboard)
+        document.getElementById('share-btn').addEventListener('click', async () => {
+            const t = translations[currentLang];
+            const shareText = currentLang === 'zh-TW' 
+                ? '來看看我用 EqualPlay 創作的樂譜！' 
+                : 'Check out my score created with EqualPlay!';
+            
+            try {
+                await navigator.clipboard.writeText(shareText + ' ' + window.location.href);
+                alert(currentLang === 'zh-TW' ? '已複製分享連結！' : 'Share link copied!');
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        });
+        
+        // Load the score when page loads
+        loadScore();
     </script>
 </body>
 </html>
