@@ -45,24 +45,9 @@
             font-size: 4rem;
             font-family: 'serif';
         }
-
-        /* Language Switcher */
-        .lang-switcher {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
     </style>
 </head>
 <body class="antialiased">
-    <!-- Language Switcher -->
-    <div class="lang-switcher">
-        <button id="lang-toggle" class="btn bg-primary text-primary-foreground font-bold py-2 px-4 rounded-lg text-sm">
-            English
-        </button>
-    </div>
-
     <!-- Landscape Warning -->
     <div id="landscape-warning" class="flex-col items-center justify-center text-center p-4 min-h-screen">
         <i data-lucide="smartphone" class="w-24 h-24 mb-4 animate-pulse"></i>
@@ -72,7 +57,12 @@
     <!-- Score Content -->
     <div id="score-page-content" class="w-full min-h-screen flex flex-col p-4">
         <header class="flex justify-between items-center mb-4 text-gray-800">
-            <a href="mixer.html" class="btn bg-secondary text-secondary-foreground p-3 rounded-lg"><i data-lucide="arrow-left"></i></a>
+            <div class="flex items-center space-x-2">
+                <a href="mixer.html" class="btn bg-secondary text-secondary-foreground p-3 rounded-lg"><i data-lucide="arrow-left"></i></a>
+                <button id="lang-toggle" class="btn bg-primary text-primary-foreground font-bold py-2 px-4 rounded-lg text-sm">
+                    English
+                </button>
+            </div>
             <div class="text-center">
                 <h1 id="song-title" class="text-3xl font-bold font-serif">我的開心歌曲</h1>
                 <p id="song-details" class="text-lg">C 大調 - 快</p>
