@@ -60,8 +60,8 @@
         <header class="flex justify-between items-center mb-4 text-gray-800">
             <a href="mixer.html" class="btn bg-secondary text-secondary-foreground p-3 rounded-lg"><i data-lucide="arrow-left"></i></a>
             <div class="text-center">
-                <h1 class="text-3xl font-bold font-serif">My Happy Song</h1>
-                <p class="text-lg">C Major - Fast</p>
+                <h1 id="song-title" class="text-3xl font-bold font-serif">My Happy Song</h1>
+                <p id="song-details" class="text-lg">C Major - Fast</p>
             </div>
             <div class="flex items-center space-x-2">
                 <button class="btn bg-primary text-primary-foreground p-3 rounded-lg"><i data-lucide="share-2"></i></button>
@@ -116,7 +116,24 @@
     </div>
 
     <script>
-        lucide.createIcons();
+        // Try to create icons, but don't let it break the rest of the script
+        try {
+            lucide.createIcons();
+        } catch (e) {
+            console.log('Lucide icons not loaded');
+        }
+
+        // Load parameters from session storage
+        const savedParams = sessionStorage.getItem('musicParams');
+        if (savedParams) {
+            const params = JSON.parse(savedParams);
+            const songTitle = document.getElementById('song-title');
+            const songDetails = document.getElementById('song-details');
+            
+            // Update title and details
+            songTitle.textContent = `My ${params.feeling} Song`;
+            songDetails.textContent = `C ${params.key} - ${params.speed}`;
+        }
     </script>
 </body>
 </html>
