@@ -208,15 +208,43 @@
             </div>
         </div>
 
-        <a href="score.html" class="btn bg-accent text-accent-foreground font-bold py-4 px-8 rounded-full text-2xl mt-12">
+        <!-- AI Prompt Preview Section -->
+        <div class="w-full max-w-2xl mt-8 p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
+            <h2 class="text-2xl font-bold mb-4 text-center">🤖 AI PROMPT PREVIEW</h2>
+            <div class="p-4 bg-muted rounded-lg border-2 border-foreground font-mono text-sm">
+                <p id="prompt-preview" class="whitespace-pre-wrap">Select your parameters above to generate an AI prompt...</p>
+            </div>
+        </div>
+
+        <button id="make-music-btn" class="btn bg-accent text-accent-foreground font-bold py-4 px-8 rounded-full text-2xl mt-12">
             Make Music! 🎶
-        </a>
+        </button>
+    </div>
+
+    <!-- Loading Screen Overlay -->
+    <div id="loading-screen" class="fixed inset-0 bg-background bg-opacity-95 flex flex-col items-center justify-center z-50 hidden">
+        <div class="text-center">
+            <div class="mb-8">
+                <div class="animate-spin rounded-full h-32 w-32 border-8 border-primary border-t-accent mx-auto"></div>
+            </div>
+            <h2 class="text-3xl font-bold mb-4">🎵 AI is creating your music... 🎵</h2>
+            <div class="w-96 h-8 bg-muted rounded-full border-2 border-foreground overflow-hidden mb-4">
+                <div id="progress-bar" class="h-full bg-accent transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="status-text" class="text-xl font-mono text-muted-foreground">Initializing...</p>
+        </div>
     </div>
 
     <script>
         // --- Music Mixer Logic ---
         const feelingButtons = document.querySelectorAll('.feeling-btn');
         const speedButtons = document.querySelectorAll('.speed-btn');
+        const keySwitch = document.getElementById('key-switch');
+        const promptPreview = document.getElementById('prompt-preview');
+        const makeMusicBtn = document.getElementById('make-music-btn');
+        const loadingScreen = document.getElementById('loading-screen');
+        const progressBar = document.getElementById('progress-bar');
+        const statusText = document.getElementById('status-text');
         
         // Background colors for each feeling
         const feelingColors = {
@@ -225,6 +253,54 @@
             'feeling-calm': 'oklch(0.96 0.04 240)',       // Light blue
             'feeling-sad': 'oklch(0.94 0.02 260)'         // Light purple-gray
         };
+
+        // Get selected parameters
+        function getSelectedParameters() {
+            const selectedFeeling = document.querySelector('.feeling-btn.selected');
+            const selectedSpeed = document.querySelector('.speed-btn.selected');
+            const keyMode = keySwitch.checked ? 'Minor' : 'Major';
+            
+            return {
+                feeling: selectedFeeling ? selectedFeeling.textContent.trim().split('\n').pop().trim() : 'Happy',
+                speed: selectedSpeed ? selectedSpeed.textContent.trim().split('\n').pop().trim() : 'Medium',
+                key: keyMode
+            };
+        }
+
+        // Generate AI prompt based on parameters
+        function generatePrompt() {
+            const params = getSelectedParameters();
+            
+            const prompt = `Generate a piano composition with the following characteristics:
+
+Mood: ${params.feeling}
+- Create a ${params.feeling.toLowerCase()} and emotionally resonant melody
+- Use chord progressions that evoke a ${params.feeling.toLowerCase()} feeling
+
+Key: ${params.key}
+- Compose in ${params.key} key
+- ${params.key === 'Major' ? 'Bright and uplifting tonality' : 'Melancholic and introspective tonality'}
+
+Tempo: ${params.speed}
+- ${params.speed === 'Slow' ? 'Andante (60-80 BPM) - slow and deliberate pacing' : 
+     params.speed === 'Medium' ? 'Moderato (90-120 BPM) - comfortable walking pace' : 
+     'Allegro (130-160 BPM) - quick and energetic tempo'}
+
+Style Requirements:
+- Create a simple, playable piano score suitable for beginners to intermediate players
+- Include both treble and bass clef notation
+- Length: 16-32 measures
+- Use appropriate dynamics and articulation markings
+
+Output the composition as standard music notation in MIDI format.`;
+
+            return prompt;
+        }
+
+        // Update prompt preview
+        function updatePromptPreview() {
+            promptPreview.textContent = generatePrompt();
+        }
 
         // Feeling button logic
         feelingButtons.forEach(button => {
@@ -236,6 +312,8 @@
                 button.classList.add('selected');
                 // Change background color
                 document.body.style.backgroundColor = feelingColors[button.id];
+                // Update prompt preview
+                updatePromptPreview();
             });
         });
 
@@ -247,13 +325,60 @@
                 speedButtons.forEach(btn => btn.classList.remove('selected'));
                 // Add selected to clicked
                 button.classList.add('selected');
+                // Update prompt preview
+                updatePromptPreview();
             });
         });
 
-        // Set initial selections
+        // Key switch logic
+        keySwitch.addEventListener('change', () => {
+            updatePromptPreview();
+        });
+
+        // Loading screen statuses
+        const loadingStatuses = [
+            { progress: 0, text: 'Initializing AI composer...' },
+            { progress: 20, text: 'Analyzing musical parameters...' },
+            { progress: 40, text: 'Generating melody structure...' },
+            { progress: 60, text: 'Creating harmonic progressions...' },
+            { progress: 80, text: 'Arranging notes on the staff...' },
+            { progress: 100, text: 'Finalizing your composition!' }
+        ];
+
+        // Make Music button logic
+        makeMusicBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Save parameters to session storage
+            const params = getSelectedParameters();
+            sessionStorage.setItem('musicParams', JSON.stringify(params));
+            
+            // Show loading screen
+            loadingScreen.classList.remove('hidden');
+            
+            // Animate loading with status updates
+            let currentStatus = 0;
+            const statusInterval = setInterval(() => {
+                if (currentStatus < loadingStatuses.length) {
+                    const status = loadingStatuses[currentStatus];
+                    progressBar.style.width = status.progress + '%';
+                    statusText.textContent = status.text;
+                    currentStatus++;
+                } else {
+                    clearInterval(statusInterval);
+                    // Navigate to score page after 5 seconds
+                    setTimeout(() => {
+                        window.location.href = 'score.html';
+                    }, 300);
+                }
+            }, 800); // Update every 800ms (5 seconds / 6 statuses ≈ 800ms)
+        });
+
+        // Set initial selections and update preview
         document.getElementById('feeling-happy').classList.add('selected');
         document.body.style.backgroundColor = feelingColors['feeling-happy'];
         document.getElementById('speed-medium').classList.add('selected');
+        updatePromptPreview();
 
     </script>
 </body>
