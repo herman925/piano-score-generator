@@ -116,7 +116,12 @@
     </div>
 
     <script>
-        lucide.createIcons();
+        // Try to create icons, but don't let it break the rest of the script
+        try {
+            lucide.createIcons();
+        } catch (e) {
+            console.log('Lucide icons not loaded');
+        }
 
         // Load parameters from session storage
         const savedParams = sessionStorage.getItem('musicParams');
