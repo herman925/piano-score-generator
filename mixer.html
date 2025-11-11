@@ -200,12 +200,18 @@
             <div class="text-center p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
                 <h2 id="key-header" class="text-2xl font-bold mb-6">調性</h2>
                 <div class="flex justify-center items-center space-x-4">
-                    <span class="text-5xl">☀️</span>
+                    <div class="flex flex-col items-center">
+                        <span class="text-5xl">☀️</span>
+                        <span id="major-label" class="text-sm font-bold mt-2">大調</span>
+                    </div>
                     <label class="switch">
                         <input type="checkbox" id="key-switch">
                         <span class="slider round"></span>
                     </label>
-                    <span class="text-5xl">🌙</span>
+                    <div class="flex flex-col items-center">
+                        <span class="text-5xl">🌙</span>
+                        <span id="minor-label" class="text-sm font-bold mt-2">小調</span>
+                    </div>
                 </div>
             </div>
             <div class="text-center p-6 bg-card rounded-lg border-2 border-foreground shadow-md">
@@ -280,6 +286,8 @@
                 backText: '返回',
                 major: '大調',
                 minor: '小調',
+                majorLabel: '大調',
+                minorLabel: '小調',
                 loadingStatus: ['初始化 AI 作曲器...', '分析音樂參數...', '生成旋律結構...', '創作和聲進行...', '在五線譜上排列音符...', '完成你的作品！']
             },
             'en': {
@@ -292,7 +300,7 @@
                 excited: 'Excited',
                 calm: 'Calm',
                 sad: 'Sad',
-                keyHeader: 'KEY',
+                keyHeader: 'TONALITY',
                 speedHeader: 'SPEED',
                 slow: 'Slow',
                 medium: 'Medium',
@@ -305,6 +313,8 @@
                 backText: 'Back',
                 major: 'Major',
                 minor: 'Minor',
+                majorLabel: 'Major',
+                minorLabel: 'Minor',
                 loadingStatus: ['Initializing AI composer...', 'Analyzing musical parameters...', 'Generating melody structure...', 'Creating harmonic progressions...', 'Arranging notes on the staff...', 'Finalizing your composition!']
             }
         };
@@ -328,6 +338,8 @@
             document.getElementById('loading-title').textContent = t.loadingTitle;
             document.getElementById('lang-toggle').textContent = t.langButton;
             document.getElementById('back-text').textContent = t.backText;
+            document.getElementById('major-label').textContent = t.majorLabel;
+            document.getElementById('minor-label').textContent = t.minorLabel;
             
             // Update all data-i18n elements
             document.querySelectorAll('[data-i18n]').forEach(el => {
