@@ -168,7 +168,7 @@
     <div class="flex flex-col items-center justify-center min-h-screen p-4">
         <h1 id="page-title" class="text-3xl font-bold mb-4 text-center">🎹 音樂創作器 🎹</h1>
         <div class="flex items-center justify-center mb-6 text-lg">
-            <img src="https://placehold.co/80x80/FBBF24/3B0764?text=Bear" alt="友善的熊寶寶吉祥物" class="rounded-full border-2 border-foreground shadow-sm mr-4">
+            <img id="mascot-image" src="assets/EqualPlay_Logo_Square.jpg" alt="EqualPlay 方形標誌" class="w-20 h-20 object-contain bg-white rounded-2xl border-2 border-foreground shadow-sm mr-4 p-2">
             <p id="mascot-text" class="p-3 bg-white rounded-lg shadow-md border-2 border-foreground">"調整參數來創作你的歌曲！"</p>
         </div>
 
@@ -267,7 +267,7 @@
                 title: '音樂創作器 - 參數設定',
                 pageTitle: '🎹 音樂創作器 🎹',
                 mascotText: '"調整參數來創作你的歌曲！"',
-                mascotAlt: '友善的熊寶寶吉祥物',
+                mascotAlt: 'EqualPlay 方形標誌',
                 feelingHeader: '情緒',
                 happy: '開心',
                 excited: '興奮',
@@ -294,7 +294,7 @@
                 title: 'Music Mixer - Parameters',
                 pageTitle: '🎹 Music Mixer 🎹',
                 mascotText: '"Turn the dials to create your song!"',
-                mascotAlt: 'Friendly Bear Mascot',
+                mascotAlt: 'EqualPlay square logo',
                 feelingHeader: 'FEELING',
                 happy: 'Happy',
                 excited: 'Excited',
@@ -329,7 +329,7 @@
             document.title = t.title;
             document.getElementById('page-title').textContent = t.pageTitle;
             document.getElementById('mascot-text').textContent = t.mascotText;
-            document.querySelector('img').alt = t.mascotAlt;
+            document.getElementById('mascot-image').alt = t.mascotAlt;
             document.getElementById('feeling-header').textContent = t.feelingHeader;
             document.getElementById('key-header').textContent = t.keyHeader;
             document.getElementById('speed-header').textContent = t.speedHeader;
