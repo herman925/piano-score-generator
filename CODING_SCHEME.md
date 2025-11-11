@@ -40,18 +40,14 @@ where:
 
 | File | Song Name | Codes | Key Types |
 |------|-----------|-------|-----------|
-| `Hot_Cross_Buns.jpeg` | Hot Cross Buns | `Happy_Med_M` | Major |
-| `The_Wheels_On_The_Bus.jpeg` | The Wheels on the Bus | `Happy_Fast_M`, `Excited_Fast_M` | Major |
-| `Twinkle_Twinkle_Little_Star.jpeg` | Twinkle Twinkle Little Star | `Calm_Med_M`, `Calm_Slow_M` | Major |
-| `Rain_Rain_Go_Away.jpeg` | Rain Rain Go Away | `Sad_Med_M`, `Sad_Slow_M` | Major |
-| `The_Bear_Went_Over_The_Mountain.jpeg` | The Bear Went Over the Mountain | `Calm_Slow_m`, `Sad_Slow_m` | minor |
+| `Hot_Cross_Buns.jpeg` | Hot Cross Buns | `Happy_Fast_M`, `Happy_Fast_m`, `Happy_Med_M`, `Happy_Med_m` | Major & minor |
+| `Rain_Rain_Go_Away.jpeg` | Rain Rain Go Away | `Happy_Slow_M`, `Happy_Slow_m` | Major & minor |
+| `The_Wheels_On_The_Bus.jpeg` | The Wheels on the Bus | `Excited_Fast_M`, `Excited_Fast_m`, `Excited_Med_M`, `Excited_Med_m`, `Excited_Slow_M`, `Excited_Slow_m` | Major & minor |
+| `Twinkle_Twinkle_Little_Star.jpeg` | Twinkle Twinkle Little Star | `Calm_Fast_M`, `Calm_Fast_m`, `Calm_Med_M`, `Calm_Med_m` | Major & minor |
+| `The_Ants_Go_Marching.jpeg` | The Ants Go Marching | `Calm_Slow_M`, `Calm_Slow_m` | Major & minor |
+| `The_Bear_Went_Over_The_Mountain.jpeg` | The Bear Went Over the Mountain | `Sad_Fast_M`, `Sad_Fast_m`, `Sad_Med_M`, `Sad_Med_m`, `Sad_Slow_M`, `Sad_Slow_m` | Major & minor |
 
-**Planned/Future Scores:**
-
-| Codes | Song Name | Status |
-|-------|-----------|--------|
-| `Happy_Fast_m`, `Happy_Med_m` | The Ants Go Marching | Pending |
-| `Excited_Fast_m`, `Excited_Med_m` | The Ants Go Marching | Pending |
+**Note:** All 24 possible combinations (4 emotions × 3 speeds × 2 keys) are now mapped to scores.
 
 ## Examples
 
@@ -76,9 +72,10 @@ The application uses these coded names to:
 
 **Example Mapping:**
 ```
-Code: Happy_Fast_M → File: The_Wheels_On_The_Bus.jpeg
-Code: Calm_Slow_M → File: Twinkle_Twinkle_Little_Star.jpeg
-Code: Sad_Med_m → File: Rain_Rain_Go_Away.jpeg
+Code: Happy_Fast_M → File: Hot_Cross_Buns.jpeg
+Code: Calm_Slow_M → File: The_Ants_Go_Marching.jpeg
+Code: Sad_Med_m → File: The_Bear_Went_Over_The_Mountain.jpeg
+Code: Excited_Slow_m → File: The_Wheels_On_The_Bus.jpeg
 ```
 
 ## Implementation Notes
